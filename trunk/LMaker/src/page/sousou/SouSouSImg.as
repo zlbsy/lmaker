@@ -6,6 +6,8 @@ package page.sousou
 	import flash.geom.Point;
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
+	import flash.net.URLLoaderDataFormat;
+	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
 	import zhanglubin.legend.display.LBitmap;
@@ -13,6 +15,7 @@ package page.sousou
 	import zhanglubin.legend.display.LImageLoader;
 	import zhanglubin.legend.display.LScrollbar;
 	import zhanglubin.legend.display.LSprite;
+	import zhanglubin.legend.display.LURLLoader;
 	import zhanglubin.legend.utils.LDisplay;
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
@@ -20,6 +23,9 @@ package page.sousou
 	public class SouSouSImg extends LSprite
 	{
 		private const SAVE_INDEX:int = 1;
+		
+		private var _urlloader:LURLLoader;
+		private var _bytesList:Array;
 		private var xffffffBit:BitmapData = new BitmapData(100,20,false,0xffffff);
 		private var xccccccBit:BitmapData = new BitmapData(100,20,false,0xcccccc);
 		private var x999999Bit:BitmapData = new BitmapData(100,20,false,0x999999);
@@ -50,6 +56,36 @@ package page.sousou
 			LDisplay.drawRect(this.graphics,[10,30,124,484],false,0x000000);
 			LDisplay.drawRect(this.graphics,[140,30,650,484],false,0x000000);
 			
+			_urlloader = new LURLLoader();
+			_urlloader.addEventListener(Event.COMPLETE,loadAtkOver);
+			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+			_urlloader.load(new URLRequest(Global.sousouPath+"/images/atk.limg"))
+		}
+		private function loadAtkOver(event:Event):void{
+			_bytesList = new Array();
+			_bytesList.push(event.target.data);
+			_urlloader.die();
+			_urlloader = new LURLLoader();
+			_urlloader.addEventListener(Event.COMPLETE,loadMovOver);
+			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+			_urlloader.load(new URLRequest(Global.sousouPath+"/images/mov.limg"))
+		}
+		private function loadMovOver(event:Event):void{
+			_bytesList.push(event.target.data);
+			_urlloader.die();
+			_urlloader = new LURLLoader();
+			_urlloader.addEventListener(Event.COMPLETE,loadSpcOver);
+			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+			_urlloader.load(new URLRequest(Global.sousouPath+"/images/spc.limg"))
+		}
+		private function loadSpcOver(event:Event):void{
+			_bytesList.push(event.target.data);
+			_urlloader.die();
+			_urlloader = null;
+			var sousouSimg:SouSouSImg = new SouSouSImg(_bytesList);
+			sousouSimg.x = 10;
+			sousouSimg.y = 10;
+			
 			_bitSave = new LBitmap(Global.imgData[SAVE_INDEX]);
 			LFilter.setFilter(_bitSave,LFilter.GRAY);
 			_bitSave.x = 20;
@@ -61,9 +97,11 @@ package page.sousou
 			_btnSave.addEventListener(MouseEvent.MOUSE_UP,save);
 			_btnSave.visible = false;
 			
-			setImageList(bytesLilt);
+			setImageList(_bytesList);
 			imgView(0,0);
 			listScrollbar.scrollToTop();
+			
+			_bytesList = null;
 		}
 		public function setImageList(bytesLilt:Array):void{
 			var bytesATK:ByteArray,bytesMOV:ByteArray,bytesSPC:ByteArray;
@@ -317,25 +355,43 @@ package page.sousou
 			this.addChild(listScrollbar);
 		}
 		public function save(event:MouseEvent):void{
-			var bytes:ByteArray = new ByteArray();
+			var bytesATK:ByteArray = new ByteArray();
+			var bytesMOV:ByteArray = new ByteArray();
+			var bytesSPC:ByteArray = new ByteArray();
 			var bitmapdata:BitmapData;
 			var byte:ByteArray;
 			var i:int;
+			
 			for(i=0;i<imglistATK.length;i++){
 				bitmapdata = imglistATK[i];
 				byte = bitmapdata.getPixels(bitmapdata.rect);
-				bytes.writeUnsignedInt(bitmapdata.width);
-				bytes.writeUnsignedInt(bitmapdata.height);
-				bytes.writeBytes(byte);
+				bytesATK.writeUnsignedInt(bitmapdata.width);
+				bytesATK.writeUnsignedInt(bitmapdata.height);
+				bytesATK.writeBytes(byte);
 			}
-			bytes.compress();
-			var namestr:String;
-			if(_file.name.length > 0){
-				namestr = _file.name.replace(_file.type,"");
-			}else{
-				namestr = "img";
+			bytesATK.compress();
+			Global.saveBytesData(Global.sousouPath + "/images","atk.limg",bytesATK);
+			
+			for(i=0;i<imglistMOV.length;i++){
+				bitmapdata = imglistMOV[i];
+				byte = bitmapdata.getPixels(bitmapdata.rect);
+				bytesMOV.writeUnsignedInt(bitmapdata.width);
+				bytesMOV.writeUnsignedInt(bitmapdata.height);
+				bytesMOV.writeBytes(byte);
 			}
-			Global.saveBytesData(Global.sousouPath + "/images","face.limg",bytes);
+			bytesMOV.compress();
+			Global.saveBytesData(Global.sousouPath + "/images","mov.limg",bytesMOV);
+			
+			for(i=0;i<imglistSPC.length;i++){
+				bitmapdata = imglistSPC[i];
+				byte = bitmapdata.getPixels(bitmapdata.rect);
+				bytesSPC.writeUnsignedInt(bitmapdata.width);
+				bytesSPC.writeUnsignedInt(bitmapdata.height);
+				bytesSPC.writeBytes(byte);
+			}
+			bytesSPC.compress();
+			Global.saveBytesData(Global.sousouPath + "/images","spc.limg",bytesSPC);
+			
 			this._btnSave.visible = false;
 		}
 	}
