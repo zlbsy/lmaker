@@ -49,7 +49,7 @@ package
 			LGlobal.stage = stage;
 			LDisplay.drawRectGradient(this.graphics,[0,0,LGlobal.stage.stageWidth,LGlobal.stage.stageHeight],[0xcccccc,0x0000ff]);
 			
-			_imageLoader = new LImageLoader(["images/logo.png","images/save.png","images/open.png"]);
+			_imageLoader = new LImageLoader(["images/logo.png","images/save.png","images/open.png","images/delete.png"]);
 			_imageLoader.addEventListener(Event.COMPLETE,showStart);
 			//showStart();
 		}

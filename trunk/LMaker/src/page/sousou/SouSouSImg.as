@@ -17,7 +17,7 @@ package page.sousou
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
 
-	public class SouSouRImg extends LSprite
+	public class SouSouSImg extends LSprite
 	{
 		private const SAVE_INDEX:int = 1;
 		private var xffffffBit:BitmapData = new BitmapData(100,20,false,0xffffff);
@@ -28,20 +28,22 @@ package page.sousou
 		private var listScrollbar:LScrollbar;
 		private var lbtn:LButton;
 		private var viewSprite:LSprite;
-		private var imglistR0:Array;
-		private var imglistR1:Array;
+		private var imglistATK:Array;
+		private var imglistMOV:Array;
+		private var imglistSPC:Array;
 		private var imgByteArray:ByteArray;
 		private var iload:LImageLoader;
 		private var imgIndex:int;
-		private var bitViewR0:LBitmap;
-		private var bitViewR1:LBitmap;
+		private var bitViewATK:LBitmap;
+		private var bitViewMOV:LBitmap;
+		private var bitViewSPC:LBitmap;
 		private var bitSprite:LSprite;
 		private var bitScrollbar:LScrollbar;
 		private var selectBit:LBitmap;
 		private var _btnSave:LButton;
 		private var _bitSave:LBitmap;
 		private var _ctrl_type:int;
-		public function SouSouRImg(bytesLilt:Array = null)
+		public function SouSouSImg(bytesLilt:Array = null)
 		{ 
 			LDisplay.drawRectGradient(this.graphics,[0,20,800,500],[0xffffff,0x8A98F4]);
 			LDisplay.drawRect(this.graphics,[0,20,800,500],false,0x000000);
@@ -64,7 +66,7 @@ package page.sousou
 			listScrollbar.scrollToTop();
 		}
 		public function setImageList(bytesLilt:Array):void{
-			var bytesR0:ByteArray,bytesR1:ByteArray;
+			var bytesATK:ByteArray,bytesMOV:ByteArray,bytesSPC:ByteArray;
 			var i:int;
 			var bitmapdata:BitmapData;
 			var size:uint;
@@ -72,15 +74,17 @@ package page.sousou
 			var h:uint;
 			var byte:ByteArray;
 			var sizebyte:ByteArray;
-			imglistR0 = new Array();
-			imglistR1 = new Array();
+			imglistATK = new Array();
+			imglistMOV = new Array();
+			imglistSPC = new Array();
 			
 			if(bytesLilt != null && bytesLilt.length > 0){
-				bytesR0 = bytesLilt[0];
-				bytesR1 = bytesLilt[1];
+				bytesATK = bytesLilt[0];
+				bytesMOV = bytesLilt[1];
+				bytesSPC = bytesLilt[2];
 			}
 			
-			if(bytesR0 == null || bytesR1 == null){
+			if(bytesATK == null || bytesMOV == null){
 				lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);
 				lbtn.name = "0";
 				lbtn.label= "图片[0]";
@@ -93,32 +97,44 @@ package page.sousou
 				listScrollbar.y = 32;
 				this.addChild(listScrollbar);
 			}else{
-				bytesR0.uncompress();
-				for(i=0;i<bytesR0.length;i+=size){
-					w = bytesR0.readUnsignedInt();
-					h = bytesR0.readUnsignedInt();
+				bytesATK.uncompress();
+				for(i=0;i<bytesATK.length;i+=size){
+					w = bytesATK.readUnsignedInt();
+					h = bytesATK.readUnsignedInt();
 					bitmapdata = new BitmapData(w,h);
 					byte = new ByteArray();
-					bytesR0.readBytes(byte,0,w*h*4);
+					bytesATK.readBytes(byte,0,w*h*4);
 					bitmapdata.setPixels(bitmapdata.rect,byte);
-					imglistR0.push(bitmapdata); 
+					imglistATK.push(bitmapdata); 
 					
 					size = w*h*4 + 8;
 				}
 				
-				bytesR1.uncompress();
-				for(i=0;i<bytesR1.length;i+=size){
-					w = bytesR1.readUnsignedInt();
-					h = bytesR1.readUnsignedInt();
+				bytesMOV.uncompress();
+				for(i=0;i<bytesMOV.length;i+=size){
+					w = bytesMOV.readUnsignedInt();
+					h = bytesMOV.readUnsignedInt();
 					bitmapdata = new BitmapData(w,h);
 					byte = new ByteArray();
-					bytesR1.readBytes(byte,0,w*h*4);
+					bytesMOV.readBytes(byte,0,w*h*4);
 					bitmapdata.setPixels(bitmapdata.rect,byte);
-					imglistR1.push(bitmapdata); 
+					imglistMOV.push(bitmapdata); 
 					
 					size = w*h*4 + 8;
 				}
 				
+				bytesSPC.uncompress();
+				for(i=0;i<bytesSPC.length;i+=size){
+					w = bytesSPC.readUnsignedInt();
+					h = bytesSPC.readUnsignedInt();
+					bitmapdata = new BitmapData(w,h);
+					byte = new ByteArray();
+					bytesSPC.readBytes(byte,0,w*h*4);
+					bitmapdata.setPixels(bitmapdata.rect,byte);
+					imglistSPC.push(bitmapdata); 
+					
+					size = w*h*4 + 8;
+				}
 				lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);
 				lbtn.name = "0";
 				lbtn.label= "图片[0]";
@@ -146,17 +162,21 @@ package page.sousou
 			}
 			selectBit.y = by;
 			viewSprite = new LSprite(); 
-			LDisplay.drawRect(viewSprite.graphics,[22,62,48,380],true,0x0000ff,1);
-			LDisplay.drawRect(viewSprite.graphics,[122,62,48,380],true,0x0000ff,1);
 			viewSprite.x = 140;
 			viewSprite.y = 60;
 			this.addChild(viewSprite);
-			bitViewR0 = new LBitmap();
-			bitViewR1 = new LBitmap();
-			bitViewR1.x = 100;
+			bitViewATK = new LBitmap();
+			bitViewMOV = new LBitmap();
+			bitViewMOV.x = 100;
+			bitViewSPC = new LBitmap();
+			bitViewSPC.x = 200;
 			bitSprite = new LSprite();
-			bitSprite.addChild(bitViewR0);
-			bitSprite.addChild(bitViewR1);
+			LDisplay.drawRect(bitSprite.graphics,[0,0,64,768],true,0x0000ff,1);
+			LDisplay.drawRect(bitSprite.graphics,[100,0,48,528],true,0x0000ff,1);
+			LDisplay.drawRect(bitSprite.graphics,[200,0,48,240],true,0x0000ff,1);
+			bitSprite.addChild(bitViewATK);
+			bitSprite.addChild(bitViewMOV);
+			bitSprite.addChild(bitViewSPC);
 			bitScrollbar=new LScrollbar(bitSprite,600,380);
 			bitScrollbar.x = 22;
 			bitScrollbar.y= 62;
@@ -166,43 +186,57 @@ package page.sousou
 			//lbtn = LGlobal.getModelButton(0,[0,0,80,20,"载入图片",15,0x0000ff]);
 			//lbtn.name = "new";
 			lbtn = new LButton(Global.imgData[2]);
-			lbtn.name = "openR0";
+			lbtn.name = "openATK";
 			lbtn.coordinate = new Point(25,10);
 			lbtn.addEventListener(MouseEvent.MOUSE_UP,loadimg);
 			viewSprite.addChild(lbtn);
 			lbtn = new LButton(Global.imgData[2]);
-			lbtn.name = "openR1";
+			lbtn.name = "openMOV";
 			lbtn.coordinate = new Point(125,10);
+			lbtn.addEventListener(MouseEvent.MOUSE_UP,loadimg);
+			viewSprite.addChild(lbtn);
+			lbtn = new LButton(Global.imgData[2]);
+			lbtn.name = "openSPC";
+			lbtn.coordinate = new Point(225,10);
 			lbtn.addEventListener(MouseEvent.MOUSE_UP,loadimg);
 			viewSprite.addChild(lbtn);
 			
 			imgIndex = bindex;
-			if(imgIndex < imglistR0.length){
+			if(imgIndex < imglistATK.length){
 				lbtn = new LButton(Global.imgData[3]);
-				lbtn.name = "deleteR0";
+				lbtn.name = "deleteATK";
 				lbtn.coordinate = new Point(55,10);
 				lbtn.addEventListener(MouseEvent.MOUSE_UP,deleteimg);
 				viewSprite.addChild(lbtn);
-				bitViewR0.bitmapData = imglistR0[imgIndex];
+				bitViewATK.bitmapData = imglistATK[imgIndex];
 			}
-			if(imgIndex < imglistR1.length){
+			if(imgIndex < imglistMOV.length){
 				lbtn = new LButton(Global.imgData[3]);
-				lbtn.name = "deleteR1";
+				lbtn.name = "deleteMOV";
 				lbtn.coordinate = new Point(155,10);
 				lbtn.addEventListener(MouseEvent.MOUSE_UP,deleteimg);
 				viewSprite.addChild(lbtn);
-				bitViewR1.bitmapData = imglistR1[imgIndex];
+				bitViewMOV.bitmapData = imglistMOV[imgIndex];
 			}
-			
+			if(imgIndex < imglistSPC.length){
+				lbtn = new LButton(Global.imgData[3]);
+				lbtn.name = "deleteSPC";
+				lbtn.coordinate = new Point(255,10);
+				lbtn.addEventListener(MouseEvent.MOUSE_UP,deleteimg);
+				viewSprite.addChild(lbtn);
+				bitViewSPC.bitmapData = imglistSPC[imgIndex];
+			}
 		}
 		public function deleteimg(event:MouseEvent):void{
 			var scroll_y:int = listScrollbar.scrollY;
 			var index:int = imgIndex;
 			var by:int = selectBit.y;
-			if(event.currentTarget.name == "deleteR0"){
-				imglistR0.splice(imgIndex,1);
+			if(event.currentTarget.name == "deleteATK"){
+				imglistATK.splice(imgIndex,1);
+			}else if(event.currentTarget.name == "deleteMOV"){
+				imglistMOV.splice(imgIndex,1);
 			}else{
-				imglistR1.splice(imgIndex,1);
+				imglistSPC.splice(imgIndex,1);
 			}
 			
 			resetList();
@@ -211,10 +245,12 @@ package page.sousou
 			this._btnSave.visible = true;
 		}
 		public function loadimg(event:MouseEvent):void{
-			if(event.currentTarget.name == "openR0"){
+			if(event.currentTarget.name == "openATK"){
 				_ctrl_type = 0;
-			}else{
+			}else if(event.currentTarget.name == "openMOV"){
 				_ctrl_type = 1;
+			}else{
+				_ctrl_type = 2;
 			}
 			_file = new FileReference();
 			_file.browse([new FileFilter("Image", "*.jpg;*.gif;*.png") ] );
@@ -234,11 +270,14 @@ package page.sousou
 			var bitmapdata:BitmapData = iload.data;
 			var bitView:LBitmap,imglist:Array;
 			if(_ctrl_type == 0){
-				bitView = bitViewR0;
-				imglist = imglistR0;
+				bitView = bitViewATK;
+				imglist = imglistATK;
+			}else if(_ctrl_type == 0){
+				bitView = bitViewMOV;
+				imglist = imglistMOV;
 			}else{
-				bitView = bitViewR1;
-				imglist = imglistR1;
+				bitView = bitViewSPC;
+				imglist = imglistSPC;
 			}
 			bitView.bitmapData = bitmapdata;
 			if(imgIndex >= imglist.length){
@@ -253,7 +292,7 @@ package page.sousou
 			if(listScrollbar)listScrollbar.removeFromParent();
 			var i:int;
 			listSprite = new LSprite();
-			for(i=0;i<imglistR0.length;i++){
+			for(i=0;i<imglistATK.length;i++){
 				lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);
 				lbtn.name = i.toString();
 				lbtn.label= "图片["+i.toString()+"]";
@@ -282,8 +321,8 @@ package page.sousou
 			var bitmapdata:BitmapData;
 			var byte:ByteArray;
 			var i:int;
-			for(i=0;i<imglistR0.length;i++){
-				bitmapdata = imglistR0[i];
+			for(i=0;i<imglistATK.length;i++){
+				bitmapdata = imglistATK[i];
 				byte = bitmapdata.getPixels(bitmapdata.rect);
 				bytes.writeUnsignedInt(bitmapdata.width);
 				bytes.writeUnsignedInt(bitmapdata.height);
