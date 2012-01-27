@@ -8,6 +8,7 @@ package page.sousou
 	import flash.filesystem.FileStream;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
+	import flash.utils.ByteArray;
 	
 	import zhanglubin.legend.components.LLabel;
 	import zhanglubin.legend.components.LRadio;
@@ -20,7 +21,6 @@ package page.sousou
 	import zhanglubin.legend.utils.LDisplay;
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
-	import zhanglubin.legend.utils.LString;
 
 	public class SouSouMake extends LSprite
 	{
@@ -35,6 +35,7 @@ package page.sousou
 		private var _radioIndex:int;
 		private var _radio:LRadio;
 		private var _lblPath:LLabel;
+		private var _bytesList:Array;
 		public function SouSouMake()
 		{
 			addBar();
@@ -89,9 +90,6 @@ package page.sousou
 			}
 			if(_sousouPath.length > 0 && Global.isDirectory(_sousouPath)){
 				initSouSou();
-			}else{
-				Global.showMsg("错误信息","路径不正确，或者游戏版本不正确。\n请重新设置正确的游戏路径。");
-				return;
 			}
 		}
 		private function onSingleSelect(event:Event):void{
@@ -101,9 +99,8 @@ package page.sousou
 				pathArr = (_iniArray[i] as String).split(":");
 				if(pathArr[0] == "sousouPath"){
 					_iniArray[i] = "sousouPath:"+_filePath;
-					_lblPath.htmlText = "<font size='20'><b>" + _filePath + "</b></font>";
+					break;
 				}
-				_iniArray[i] = LString.trim(_iniArray[i]);
 			}
 			Global.saveAppData("","LMaker.ini",_iniArray.join("\n"));
 			initSouSou();
@@ -179,13 +176,72 @@ package page.sousou
 					_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
 					_urlloader.load(new URLRequest(_sousouPath+"/images/face.limg"))
 					break;
+				case "rimg":
+					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
+					_urlloader = new LURLLoader();
+					_urlloader.addEventListener(Event.COMPLETE,loadR0Over);
+					_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+					_urlloader.load(new URLRequest(_sousouPath+"/images/r0.limg"))
+					break;
+				case "simg":
+					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
+					_urlloader = new LURLLoader();
+					_urlloader.addEventListener(Event.COMPLETE,loadAtkOver);
+					_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+					_urlloader.load(new URLRequest(_sousouPath+"/images/atk.limg"))
+					break;
 			}
 		}
 		private function loadFaceOver(event:Event):void{
+			_urlloader.die();
 			var sousouFace:SouSouFace = new SouSouFace(event.target.data);
 			sousouFace.x = 10;
 			sousouFace.y = 10;
 			_ctrlSprite.addChild(sousouFace);
+		}
+		private function loadR0Over(event:Event):void{
+			_bytesList = new Array();
+			_bytesList.push(event.target.data);
+			_urlloader.die();
+			_urlloader = new LURLLoader();
+			_urlloader.addEventListener(Event.COMPLETE,loadR1Over);
+			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+			_urlloader.load(new URLRequest(_sousouPath+"/images/r1.limg"))
+		}
+		private function loadR1Over(event:Event):void{
+			_bytesList.push(event.target.data);
+			_urlloader.die();
+			var sousouRimg:SouSouRImg = new SouSouRImg(_bytesList);
+			sousouRimg.x = 10;
+			sousouRimg.y = 10;
+			_ctrlSprite.addChild(sousouRimg);
+			_bytesList = null;
+		}
+		private function loadAtkOver(event:Event):void{
+			_bytesList = new Array();
+			_bytesList.push(event.target.data);
+			_urlloader.die();
+			_urlloader = new LURLLoader();
+			_urlloader.addEventListener(Event.COMPLETE,loadMovOver);
+			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+			_urlloader.load(new URLRequest(_sousouPath+"/images/mov.limg"))
+		}
+		private function loadMovOver(event:Event):void{
+			_bytesList.push(event.target.data);
+			_urlloader.die();
+			_urlloader = new LURLLoader();
+			_urlloader.addEventListener(Event.COMPLETE,loadSpcOver);
+			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+			_urlloader.load(new URLRequest(_sousouPath+"/images/spc.limg"))
+		}
+		private function loadSpcOver(event:Event):void{
+			_bytesList.push(event.target.data);
+			_urlloader.die();
+			var sousouSimg:SouSouSImg = new SouSouSImg(_bytesList);
+			sousouSimg.x = 10;
+			sousouSimg.y = 10;
+			_ctrlSprite.addChild(sousouSimg);
+			_bytesList = null;
 		}
 	}
 }
