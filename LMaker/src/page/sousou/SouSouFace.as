@@ -6,6 +6,8 @@ package page.sousou
 	import flash.geom.Point;
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
+	import flash.net.URLLoaderDataFormat;
+	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
 	import zhanglubin.legend.display.LBitmap;
@@ -13,12 +15,14 @@ package page.sousou
 	import zhanglubin.legend.display.LImageLoader;
 	import zhanglubin.legend.display.LScrollbar;
 	import zhanglubin.legend.display.LSprite;
+	import zhanglubin.legend.display.LURLLoader;
 	import zhanglubin.legend.utils.LDisplay;
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
 
 	public class SouSouFace extends LSprite
 	{
+		private var _urlloader:LURLLoader;
 		private const SAVE_INDEX:int = 1;
 		private var xffffffBit:BitmapData = new BitmapData(100,20,false,0xffffff);
 		private var xccccccBit:BitmapData = new BitmapData(100,20,false,0xcccccc);
@@ -45,6 +49,16 @@ package page.sousou
 			LDisplay.drawRect(this.graphics,[10,30,124,484],false,0x000000);
 			LDisplay.drawRect(this.graphics,[140,30,650,484],false,0x000000);
 			
+			_urlloader = new LURLLoader();
+			_urlloader.addEventListener(Event.COMPLETE,loadFaceOver);
+			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+			_urlloader.load(new URLRequest(Global.sousouPath+"/images/face.limg"))
+			
+		}
+		private function loadFaceOver(event:Event):void{
+			_urlloader.die();
+			_urlloader = null;
+			
 			_bitSave = new LBitmap(Global.imgData[SAVE_INDEX]);
 			LFilter.setFilter(_bitSave,LFilter.GRAY);
 			_bitSave.x = 20;
@@ -56,7 +70,7 @@ package page.sousou
 			_btnSave.addEventListener(MouseEvent.MOUSE_UP,save);
 			_btnSave.visible = false;
 			
-			setImageList(bytes);
+			setImageList(event.target.data);
 			imgView(0,0);
 			listScrollbar.scrollToTop();
 		}
@@ -228,12 +242,6 @@ package page.sousou
 				bytes.writeBytes(byte);
 			}
 			bytes.compress();
-			var namestr:String;
-			if(_file.name.length > 0){
-				namestr = _file.name.replace(_file.type,"");
-			}else{
-				namestr = "img";
-			}
 			Global.saveBytesData(Global.sousouPath + "/images","face.limg",bytes);
 			this._btnSave.visible = false;
 		}

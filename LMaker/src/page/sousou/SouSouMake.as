@@ -24,6 +24,20 @@ package page.sousou
 
 	public class SouSouMake extends LSprite
 	{
+		private const BTN_LABEL_SET:String = "设定游戏目录";
+		private const SELECT_TEXT:String = "请选择游戏目录";
+		private const STR_EMPTY:String = "";
+		private const STR_COLON:String = ":";
+		private const STR_ENTER:String = "\n";
+		private const STR_SLASH:String = "/";
+		private const STR_VER:String = "ver";
+		private const STR_SOUSOUPATH:String = "sousouPath";
+		private const ERROR_TITLE:String = "错误信息";
+		private const FILE_GAME_INI_NAME:String = "game.ini";
+		private const FILE_LMAKER_INI_NAME:String = "LMaker.ini";
+		private const DEFAULT_LMAKER_INI_MSG:String = "appPath:\nsousouPath:\nslgPath:\nrpgPath:\nmmrpgPath:";
+		
+		
 		private var _barSprite:LSprite;
 		private var _ctrlSprite:LSprite;
 		private var _file:File;
@@ -54,7 +68,7 @@ package page.sousou
 			_lblPath.x = 10;
 			_lblPath.y = 3;
 			_barSprite.addChild(_lblPath);
-			_btnSetPath = LGlobal.getModelButton(0,[0,0,100,20,"设定游戏目录",15,0xff0000]);
+			_btnSetPath = LGlobal.getModelButton(0,[0,0,100,20,BTN_LABEL_SET,15,0xff0000]);
 			_btnSetPath.x = LGlobal.stage.stageWidth - _btnSetPath.width - 10;
 			_btnSetPath.y = 3;
 			_barSprite.addChild(_btnSetPath);
@@ -63,25 +77,25 @@ package page.sousou
 		private function toSelectPath(event:MouseEvent):void{
 			_file = new File();
 			
-			_file.browseForDirectory("请选择游戏目录");
+			_file.browseForDirectory(SELECT_TEXT);
 			_file.addEventListener(Event.SELECT,onSingleSelect); 
 		}
 		private function loadIni():void{
-			if(!Global.existsApp("","LMaker.ini"))Global.saveAppData("","LMaker.ini","appPath:\nsousouPath:\nslgPath:\nrpgPath:\nmmrpgPath:");
+			if(!Global.existsApp(STR_EMPTY,FILE_LMAKER_INI_NAME))Global.saveAppData(STR_EMPTY,FILE_LMAKER_INI_NAME,DEFAULT_LMAKER_INI_MSG);
 			_urlloader = new LURLLoader();
 			_urlloader.addEventListener(Event.COMPLETE,loadIniOver);
-			_urlloader.load(new URLRequest("LMaker.ini"));
+			_urlloader.load(new URLRequest(FILE_LMAKER_INI_NAME));
 		}
 		private function loadIniOver(event:Event):void{
 			var data:String = event.target.data;
 			var i:int,index:int,pathArr:Array;
 			_urlloader.die();
 			_urlloader = null;
-			_iniArray = data.split("\n");
+			_iniArray = data.split(STR_ENTER);
 			for(i=0;i<_iniArray.length;i++){
-				pathArr = (_iniArray[i] as String).split(":");
-				if(pathArr[0] == "sousouPath"){
-					index = (_iniArray[i] as String).indexOf(":");
+				pathArr = (_iniArray[i] as String).split(STR_COLON);
+				if(pathArr[0] == STR_SOUSOUPATH){
+					index = (_iniArray[i] as String).indexOf(STR_COLON);
 					this._sousouPath = (_iniArray[i] as String).substring(index + 1);
 					Global.sousouPath = this._sousouPath;
 					_lblPath.htmlText = "<font size='20'><b>" + Global.sousouPath + "</b></font>";
@@ -96,41 +110,41 @@ package page.sousou
 			_filePath = (event.target as File).nativePath.toString();
 			var msg:String,pathArr:Array,i:int;
 			for(i=0;i<_iniArray.length;i++){
-				pathArr = (_iniArray[i] as String).split(":");
-				if(pathArr[0] == "sousouPath"){
-					_iniArray[i] = "sousouPath:"+_filePath;
+				pathArr = (_iniArray[i] as String).split(STR_COLON);
+				if(pathArr[0] == STR_SOUSOUPATH){
+					_iniArray[i] = STR_SOUSOUPATH + STR_COLON + _filePath;
 					break;
 				}
 			}
-			Global.saveAppData("","LMaker.ini",_iniArray.join("\n"));
+			Global.saveAppData(STR_EMPTY,FILE_LMAKER_INI_NAME,_iniArray.join(STR_ENTER));
 			initSouSou();
 		}
 		private function initSouSou():void{
-			if(!Global.exists(this._sousouPath,"game.ini")){
-				Global.showMsg("错误信息","路径不正确，或者游戏版本不正确。\n请重新设置正确的游戏路径。");
+			if(!Global.exists(this._sousouPath,FILE_GAME_INI_NAME)){
+				Global.showMsg(ERROR_TITLE,"路径不正确，或者游戏版本不正确。\n请重新设置正确的游戏路径。");
 				return;
 			}
 			_urlloader = new LURLLoader();
 			_urlloader.addEventListener(Event.COMPLETE,loadGameIniOver);
-			_urlloader.load(new URLRequest(this._sousouPath+"/game.ini"));
+			_urlloader.load(new URLRequest(this._sousouPath + STR_SLASH + FILE_GAME_INI_NAME));
 		}
 		private function loadGameIniOver(event:Event):void{
 			var data:String = event.target.data;
 			_urlloader.die();
 			_urlloader = null;
 			var i:int,index:int,pathArr:Array,ver:Number;
-			_iniArray = data.split("\n");
+			_iniArray = data.split(STR_ENTER);
 			for(i=0;i<_iniArray.length;i++){
-				pathArr = (_iniArray[i] as String).split(":");
-				if(pathArr[0] == "ver"){
-					index = (_iniArray[i] as String).indexOf(":");
+				pathArr = (_iniArray[i] as String).split(STR_COLON);
+				if(pathArr[0] == STR_VER){
+					index = (_iniArray[i] as String).indexOf(STR_COLON);
 					ver = Number((_iniArray[i] as String).substring(index + 1));
 					break;
 				}
 			}
 			
 			if(ver < 0.2){
-				Global.showMsg("错误信息","LMaker不支持该游戏版本"+ver+"。\n请重新设置正确的游戏路径。");
+				Global.showMsg(ERROR_TITLE,"LMaker不支持该游戏版本"+ver+"。\n请重新设置正确的游戏路径。");
 				return;
 			}
 			addRadioButton();
@@ -171,77 +185,48 @@ package page.sousou
 			switch(_radio.value){
 				case "face":
 					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
-					_urlloader = new LURLLoader();
-					_urlloader.addEventListener(Event.COMPLETE,loadFaceOver);
-					_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
-					_urlloader.load(new URLRequest(_sousouPath+"/images/face.limg"))
+					var sousouFace:SouSouFace = new SouSouFace();
+					sousouFace.x = 10;
+					sousouFace.y = 10;
+					_ctrlSprite.addChild(sousouFace);
 					break;
 				case "rimg":
 					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
-					_urlloader = new LURLLoader();
-					_urlloader.addEventListener(Event.COMPLETE,loadR0Over);
-					_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
-					_urlloader.load(new URLRequest(_sousouPath+"/images/r0.limg"))
+					var sousouRimg:SouSouRImg = new SouSouRImg(_bytesList);
+					sousouRimg.x = 10;
+					sousouRimg.y = 10;
+					_ctrlSprite.addChild(sousouRimg);
 					break;
 				case "simg":
 					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
-					_urlloader = new LURLLoader();
-					_urlloader.addEventListener(Event.COMPLETE,loadAtkOver);
-					_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
-					_urlloader.load(new URLRequest(_sousouPath+"/images/atk.limg"))
+					var sousouSimg:SouSouSImg = new SouSouSImg(_bytesList);
+					sousouSimg.x = 10;
+					sousouSimg.y = 10;
+					_ctrlSprite.addChild(sousouSimg);
+					break;
+				case "rmap":
+					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
+					var sousouRMap:SouSouRMap = new SouSouRMap();
+					sousouRMap.x = 10;
+					sousouRMap.y = 10;
+					_ctrlSprite.addChild(sousouRMap);
+					break;
+				case "smap":
+					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
+					var sousouSMap:SouSouSMap = new SouSouSMap();
+					sousouSMap.x = 10;
+					sousouSMap.y = 10;
+					_ctrlSprite.addChild(sousouSMap);
+					break;
+				case "t_chara":
+					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
+					var sousouTChara:SouSouTChara = new SouSouTChara();
+					sousouTChara.x = 10;
+					sousouTChara.y = 10;
+					_ctrlSprite.addChild(sousouTChara);
+					break;
 					break;
 			}
-		}
-		private function loadFaceOver(event:Event):void{
-			_urlloader.die();
-			var sousouFace:SouSouFace = new SouSouFace(event.target.data);
-			sousouFace.x = 10;
-			sousouFace.y = 10;
-			_ctrlSprite.addChild(sousouFace);
-		}
-		private function loadR0Over(event:Event):void{
-			_bytesList = new Array();
-			_bytesList.push(event.target.data);
-			_urlloader.die();
-			_urlloader = new LURLLoader();
-			_urlloader.addEventListener(Event.COMPLETE,loadR1Over);
-			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
-			_urlloader.load(new URLRequest(_sousouPath+"/images/r1.limg"))
-		}
-		private function loadR1Over(event:Event):void{
-			_bytesList.push(event.target.data);
-			_urlloader.die();
-			var sousouRimg:SouSouRImg = new SouSouRImg(_bytesList);
-			sousouRimg.x = 10;
-			sousouRimg.y = 10;
-			_ctrlSprite.addChild(sousouRimg);
-			_bytesList = null;
-		}
-		private function loadAtkOver(event:Event):void{
-			_bytesList = new Array();
-			_bytesList.push(event.target.data);
-			_urlloader.die();
-			_urlloader = new LURLLoader();
-			_urlloader.addEventListener(Event.COMPLETE,loadMovOver);
-			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
-			_urlloader.load(new URLRequest(_sousouPath+"/images/mov.limg"))
-		}
-		private function loadMovOver(event:Event):void{
-			_bytesList.push(event.target.data);
-			_urlloader.die();
-			_urlloader = new LURLLoader();
-			_urlloader.addEventListener(Event.COMPLETE,loadSpcOver);
-			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
-			_urlloader.load(new URLRequest(_sousouPath+"/images/spc.limg"))
-		}
-		private function loadSpcOver(event:Event):void{
-			_bytesList.push(event.target.data);
-			_urlloader.die();
-			var sousouSimg:SouSouSImg = new SouSouSImg(_bytesList);
-			sousouSimg.x = 10;
-			sousouSimg.y = 10;
-			_ctrlSprite.addChild(sousouSimg);
-			_bytesList = null;
 		}
 	}
 }

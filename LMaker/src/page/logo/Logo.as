@@ -18,7 +18,7 @@ package page.logo
 
 		private const IMG_LOGO_INDEX:int = 0;
 		private const TITLE:String = "LMaker游戏开发";
-		private const TITLE_MINI:String = "・L#游戏引擎专用开发工具(http://blog.csdn.net/lufy_Legend)";
+		private const TITLE_MINI:String = "・L#游戏引擎专用开发工具\n・官方博客:http://blog.csdn.net/lufy_Legend";
 		private const BTN_APP:String = "简单应用开发";
 		private const BTN_SOUSOU:String = "战棋游戏开发";
 		private const BTN_SLG:String = "<font color='#ffffff' size='20'><b>大型SLG战略游戏开发</b></font>";

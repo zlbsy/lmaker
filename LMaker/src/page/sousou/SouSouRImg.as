@@ -6,6 +6,8 @@ package page.sousou
 	import flash.geom.Point;
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
+	import flash.net.URLLoaderDataFormat;
+	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
 	import zhanglubin.legend.display.LBitmap;
@@ -13,6 +15,7 @@ package page.sousou
 	import zhanglubin.legend.display.LImageLoader;
 	import zhanglubin.legend.display.LScrollbar;
 	import zhanglubin.legend.display.LSprite;
+	import zhanglubin.legend.display.LURLLoader;
 	import zhanglubin.legend.utils.LDisplay;
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
@@ -20,6 +23,9 @@ package page.sousou
 	public class SouSouRImg extends LSprite
 	{
 		private const SAVE_INDEX:int = 1;
+		
+		private var _urlloader:LURLLoader;
+		private var _bytesList:Array;
 		private var xffffffBit:BitmapData = new BitmapData(100,20,false,0xffffff);
 		private var xccccccBit:BitmapData = new BitmapData(100,20,false,0xcccccc);
 		private var x999999Bit:BitmapData = new BitmapData(100,20,false,0x999999);
@@ -48,6 +54,25 @@ package page.sousou
 			LDisplay.drawRect(this.graphics,[10,30,124,484],false,0x000000);
 			LDisplay.drawRect(this.graphics,[140,30,650,484],false,0x000000);
 			
+			_urlloader = new LURLLoader();
+			_urlloader.addEventListener(Event.COMPLETE,loadR0Over);
+			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+			_urlloader.load(new URLRequest(Global.sousouPath+"/images/r0.limg"))
+		}
+		private function loadR0Over(event:Event):void{
+			_bytesList = new Array();
+			_bytesList.push(event.target.data);
+			_urlloader.die();
+			_urlloader = new LURLLoader();
+			_urlloader.addEventListener(Event.COMPLETE,loadR1Over);
+			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+			_urlloader.load(new URLRequest(Global.sousouPath+"/images/r1.limg"))
+		}
+		private function loadR1Over(event:Event):void{
+			_bytesList.push(event.target.data);
+			_urlloader.die();
+			_urlloader = null;
+			
 			_bitSave = new LBitmap(Global.imgData[SAVE_INDEX]);
 			LFilter.setFilter(_bitSave,LFilter.GRAY);
 			_bitSave.x = 20;
@@ -59,9 +84,11 @@ package page.sousou
 			_btnSave.addEventListener(MouseEvent.MOUSE_UP,save);
 			_btnSave.visible = false;
 			
-			setImageList(bytesLilt);
+			setImageList(_bytesList);
 			imgView(0,0);
 			listScrollbar.scrollToTop();
+			
+			_bytesList = null;
 		}
 		public function setImageList(bytesLilt:Array):void{
 			var bytesR0:ByteArray,bytesR1:ByteArray;
@@ -278,25 +305,31 @@ package page.sousou
 			this.addChild(listScrollbar);
 		}
 		public function save(event:MouseEvent):void{
-			var bytes:ByteArray = new ByteArray();
+			var bytesR0:ByteArray = new ByteArray();
+			var bytesR1:ByteArray = new ByteArray();
 			var bitmapdata:BitmapData;
 			var byte:ByteArray;
 			var i:int;
+			
 			for(i=0;i<imglistR0.length;i++){
 				bitmapdata = imglistR0[i];
 				byte = bitmapdata.getPixels(bitmapdata.rect);
-				bytes.writeUnsignedInt(bitmapdata.width);
-				bytes.writeUnsignedInt(bitmapdata.height);
-				bytes.writeBytes(byte);
+				bytesR0.writeUnsignedInt(bitmapdata.width);
+				bytesR0.writeUnsignedInt(bitmapdata.height);
+				bytesR0.writeBytes(byte);
 			}
-			bytes.compress();
-			var namestr:String;
-			if(_file.name.length > 0){
-				namestr = _file.name.replace(_file.type,"");
-			}else{
-				namestr = "img";
+			bytesR0.compress();
+			Global.saveBytesData(Global.sousouPath + "/images","r0.limg",bytesR0);
+			
+			for(i=0;i<imglistR1.length;i++){
+				bitmapdata = imglistR1[i];
+				byte = bitmapdata.getPixels(bitmapdata.rect);
+				bytesR1.writeUnsignedInt(bitmapdata.width);
+				bytesR1.writeUnsignedInt(bitmapdata.height);
+				bytesR1.writeBytes(byte);
 			}
-			Global.saveBytesData(Global.sousouPath + "/images","face.limg",bytes);
+			bytesR1.compress();
+			Global.saveBytesData(Global.sousouPath + "/images","r1.limg",bytesR1);
 			this._btnSave.visible = false;
 		}
 	}
