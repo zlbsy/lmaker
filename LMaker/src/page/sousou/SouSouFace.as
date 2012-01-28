@@ -148,17 +148,19 @@ package page.sousou
 			viewSprite.addChild(bitScrollbar);
 			LDisplay.drawLine(viewSprite.graphics,[0,40,650,40]);
 			
-			lbtn = LGlobal.getModelButton(0,[0,0,80,20,"载入图片",15,0x0000ff]);
+			//lbtn = LGlobal.getModelButton(0,[0,0,80,20,"载入图片",15,0x0000ff]);
+			lbtn = new LButton(Global.imgData[2]);
 			lbtn.name = "new";
-			lbtn.coordinate = new Point(10,10);
+			lbtn.coordinate = new Point(40,10);
 			lbtn.addEventListener(MouseEvent.MOUSE_UP,loadimg);
 			viewSprite.addChild(lbtn);
 			
 			imgIndex = bindex;
 			if(imgIndex < imglist.length){
-				lbtn = LGlobal.getModelButton(0,[0,0,80,20,"删除图片",15,0x0000ff]);
+				//lbtn = LGlobal.getModelButton(0,[0,0,80,20,"删除图片",15,0x0000ff]);
+				lbtn = new LButton(Global.imgData[3]);
 				lbtn.name = "delete";
-				lbtn.coordinate = new Point(120,10);
+				lbtn.coordinate = new Point(100,10);
 				lbtn.addEventListener(MouseEvent.MOUSE_UP,deleteimg);
 				viewSprite.addChild(lbtn);
 				bitView.bitmapData = imglist[imgIndex];

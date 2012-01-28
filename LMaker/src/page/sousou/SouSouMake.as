@@ -164,6 +164,8 @@ package page.sousou
 			_radio.push(getRadioChild("头像","face"));
 			_radio.push(getRadioChild("R形象","rimg"));
 			_radio.push(getRadioChild("S形象","simg"));
+			_radio.push(getRadioChild("R地图","rmap"));
+			_radio.push(getRadioChild("S地图","smap"));
 			_radio.push(getRadioChild("人物数据","t_chara"));
 			_radio.push(getRadioChild("兵种数据","t_arms"));
 			_radio.push(getRadioChild("装备数据","t_item"));
@@ -171,8 +173,6 @@ package page.sousou
 			_radio.push(getRadioChild("特技数据","t_skill"));
 			_radio.push(getRadioChild("法术数据","t_strategy"));
 			_radio.push(getRadioChild("地形数据","t_terrain"));
-			_radio.push(getRadioChild("R地图","rmap"));
-			_radio.push(getRadioChild("S地图","smap"));
 			_radio.push(getRadioChild("R剧本","r_juben"));
 			_radio.push(getRadioChild("S剧本","s_juben"));
 			_radio.addEventListener(LEvent.RADIO_VALUE_CHANGE,onRadioChange);

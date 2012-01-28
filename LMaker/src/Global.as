@@ -8,6 +8,7 @@ package
 	import flash.utils.ByteArray;
 	
 	import zhanglubin.legend.components.LLabel;
+	import zhanglubin.legend.components.LTextInput;
 	import zhanglubin.legend.display.LButton;
 	import zhanglubin.legend.display.LSprite;
 	import zhanglubin.legend.utils.LDisplay;
@@ -30,6 +31,24 @@ package
 			stream.writeBytes(msg);
 			//stream.writeUTFBytes(msg);
 			stream.close();
+		}
+		public static function deleteFile(path:String,filename:String):void{
+			var file:File = new File(path);
+			file = file.resolvePath(filename);
+			file.deleteFile();
+		}
+		public static function getFileList(path:String):Array{
+			var file:File = new File(path);
+			var list:Array = new Array();
+			var arr:Array;
+			var child:File;
+			if(file.isDirectory){
+				arr=file.getDirectoryListing();
+				for each(child in arr){
+					if(child.type == ".rmap")list.push([child.name,child.nativePath]);
+				}
+			}
+			return list;
 		}
 		public static function saveData(path:String,filename:String,msg:String):void{
 			var file:File = new File(path);
@@ -93,7 +112,7 @@ package
 			return isDirectory(file.nativePath);
 		}
 		
-		public static function showMsg(title:String,msg:String):void{
+		public static function showMsg(title:String,msg:String,txtBox:LTextInput = null,btn:LButton = null):LSprite{
 			var aboutSprite:LSprite = new LSprite();
 			LDisplay.drawRect(aboutSprite.graphics,[0,0,LGlobal.stage.stageWidth,LGlobal.stage.stageHeight],true,0,0.3);
 			Global.lmaker.addChild(aboutSprite);
@@ -123,14 +142,81 @@ package
 			explanationTxt.htmlText = msg;
 			aboutWindow.addChild(explanationTxt);
 			
+			if(txtBox != null){
+				txtBox.x = (aboutWindow.width - txtBox.width)/2;
+				txtBox.y = aboutWindow.height + 20;
+				aboutWindow.addChild(txtBox);
+			}
+			
+			if(btn != null){
+				btn.x = (aboutWindow.width - btn.width)/2;
+				btn.y = aboutWindow.height + 20;
+				aboutWindow.addChild(btn);
+			}
 			aboutWindow.x = (LGlobal.stage.stageWidth - 500)/2;
 			aboutWindow.y = 100;
 			aboutSprite.addChild(aboutWindow);
 			
-			LDisplay.drawRoundRect(aboutWindow.graphics,[0,0,500,explanationTxt.height + 50,10,10],true,0xffffff);
+			LDisplay.drawRoundRect(aboutWindow.graphics,[0,0,500,aboutWindow.height + 50,10,10],true,0xffffff);
 			LDisplay.drawRoundRect(aboutWindow.graphics,[1,1,498,30,10,10],true,0x333333);
 			LDisplay.drawRoundRect(aboutWindow.graphics,[468,2,30,28,10,10],true,0x999999);
 			LFilter.setFilter(aboutWindow,LFilter.SHADOW);
+			return aboutSprite;
 		}
+		
+		
+		/**
+		private function pop(file:File):void  
+        {  
+			var thisPath = file.nativePath;
+			var strType = "";
+			if(thisPath == this.filePath + "\\images\\list"){
+				strType = "list";
+			}else if(thisPath == this.filePath + "\\images\\view"){
+				strType = "view";
+			}else if(thisPath != this.filePath && thisPath != this.filePath + "\\images"){
+				return;
+			}
+            if(file.isDirectory)  
+            { //指示是否为对目录的引用。如果 File 对象指向一个目录，则该值为 true；否则为 false  
+                var arr:Array=file.getDirectoryListing();//getDirectoryListing()返回与此 File 对象表示的目录下的文件和目录对应的 File 对象的数组。此方法不浏览子目录的内容。   
+                for each(var file:File in arr){//File 对象表示文件或目录的路径(既可以是文件也可以是路径)  
+                    if(!file.isDirectory)  
+                    {  
+                        //var vo:fileVo=new FileVo();  
+                        var path:String=file.nativePath;  
+                        var startIndex:int=path.lastIndexOf("\\");  
+                        //lastIndexOf(searchElement:*, fromIndex:int = 0x7fffffff):int  
+                        //使用全等运算符 (===) 搜索数组中的项（从最后一项开始向前搜索），并返回匹配项的索引位置。  
+                       var endIndex:int=path.lastIndexOf("."); 
+						  var obj:Object = new Object();
+					   if(strType == "list"){
+							//obj.path = path.split("\\").join("/");
+							obj.path = path;
+							obj.strName = path.replace(thisPath + "\\","");
+							
+							loadImageList.push(obj);  
+					   }else if(strType == "view"){
+							//obj.path = path.split("\\").join("/");
+							obj.path = path;
+							obj.strName = path.replace(thisPath + "\\","");
+							
+							loadImageView.push(obj);  
+					   }
+						//trace("id = " + int(path.substring(startIndex+1,endIndex)));
+                        //vo.path=path;  
+                        //vo.id=int(path.substring(startIndex+1,endIndex));  
+                        //substring返回一个字符串，其中包含由 startIndex 指定的字符和一直到 endIndex - 1 的所有字符。  
+                        //fileArray.push(vo);  
+                    }else  
+                    {  
+                        pop(file);  
+                    }  
+                }  
+            }  
+           // fileArray.sortOn("id",Array.NUMERIC);  
+           // tList.dataProvider=fileArray;  
+        }  
+		 * */
 	}
 }
