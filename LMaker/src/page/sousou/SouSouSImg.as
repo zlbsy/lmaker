@@ -370,11 +370,24 @@ package page.sousou
 			listSprite.addChild(lbtn);
 			*/
 			listSprite.addChild(selectBit);
+			listSprite.addEventListener(MouseEvent.MOUSE_MOVE,mousemovelist);
+			listSprite.addEventListener(MouseEvent.MOUSE_UP,mouseclicklist);
+			listSprite.addEventListener(MouseEvent.MOUSE_OUT,mouseoutlist);
 			listScrollbar = new LScrollbar(listSprite,100,480,20,false);
 			listScrollbar.x = 12;
 			listScrollbar.y = 32;
 			listScrollbar.scrollToBottom();
 			this.addChild(listScrollbar);
+		}
+		private function mouseclicklist(event:MouseEvent):void{
+			var i:int = int(event.currentTarget.mouseY/selectBit.height);
+			imgView(0,i);
+		}
+		private function mouseoutlist(event:MouseEvent):void{
+			selectBit.y = imgIndex*selectBit.height;
+		}
+		private function mousemovelist(event:MouseEvent):void{
+			selectBit.y = int(event.currentTarget.mouseY/selectBit.height)*selectBit.height;
 		}
 		public function save(event:MouseEvent):void{
 			var bytesATK:ByteArray = new ByteArray();
