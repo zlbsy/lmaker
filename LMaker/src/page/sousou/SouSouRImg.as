@@ -49,6 +49,7 @@ package page.sousou
 		private var _ctrl_type:int;
 		public function SouSouRImg(bytesLilt:Array = null)
 		{ 
+			super();
 			LDisplay.drawRectGradient(this.graphics,[0,20,800,500],[0xffffff,0x8A98F4]);
 			LDisplay.drawRect(this.graphics,[0,20,800,500],false,0x000000);
 			LDisplay.drawRect(this.graphics,[10,30,124,484],false,0x000000);
