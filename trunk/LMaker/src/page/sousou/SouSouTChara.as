@@ -7,7 +7,7 @@ package page.sousou
 	import zhanglubin.legend.display.LSprite;
 	import zhanglubin.legend.display.LURLLoader;
 	
-	public class SouSouTChara extends LSprite
+	public class SouSouTChara extends SouSouImg
 	{
 		private var _urlloader:LURLLoader;
 		public function SouSouTChara()

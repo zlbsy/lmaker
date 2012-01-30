@@ -22,7 +22,7 @@ package page.sousou
 	import zhanglubin.legend.utils.LGlobal;
 	import zhanglubin.legend.utils.LString;
 	
-	public class SouSouRMap extends LSprite
+	public class SouSouRMap extends SouSouImg
 	{
 		private const SAVE_INDEX:int = 1;
 		private const OPEN_INDEX:int = 2;

@@ -20,7 +20,7 @@ package page.sousou
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
 
-	public class SouSouFace extends LSprite
+	public class SouSouFace extends SouSouImg
 	{
 		private var _urlloader:LURLLoader;
 		private const SAVE_INDEX:int = 1;
