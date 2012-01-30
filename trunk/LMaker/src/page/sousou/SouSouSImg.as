@@ -52,6 +52,7 @@ package page.sousou
 		private var _ctrl_type:int;
 		public function SouSouSImg(bytesLilt:Array = null)
 		{ 
+			super();
 			LDisplay.drawRectGradient(this.graphics,[0,20,800,500],[0xffffff,0x8A98F4]);
 			LDisplay.drawRect(this.graphics,[0,20,800,500],false,0x000000);
 			LDisplay.drawRect(this.graphics,[10,30,124,484],false,0x000000);
@@ -114,7 +115,7 @@ package page.sousou
 			imglistATK = new Array();
 			imglistMOV = new Array();
 			imglistSPC = new Array();
-			
+			this.bitmapdataList.push(imglistATK,imglistMOV,imglistSPC);
 			if(bytesLilt != null && bytesLilt.length > 0){
 				bytesATK = bytesLilt[0];
 				bytesMOV = bytesLilt[1];
