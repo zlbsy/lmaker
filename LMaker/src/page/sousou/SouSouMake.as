@@ -22,7 +22,7 @@ package page.sousou
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
 
-	public class SouSouMake extends LSprite
+	public class SouSouMake extends SouSouImg
 	{
 		private const BTN_LABEL_SET:String = "设定游戏目录";
 		private const SELECT_TEXT:String = "请选择游戏目录";
@@ -176,7 +176,8 @@ package page.sousou
 			_radio.push(getRadioChild("R剧本","r_juben"));
 			_radio.push(getRadioChild("S剧本","s_juben"));
 			_radio.addEventListener(LEvent.RADIO_VALUE_CHANGE,onRadioChange);
-			_radio.value = "face";
+		//	_radio.value = "face";
+			_radio.value = "simg";
 			
 			this.addChild(_radio);
 		}

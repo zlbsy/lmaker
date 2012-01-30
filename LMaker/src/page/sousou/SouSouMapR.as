@@ -10,7 +10,7 @@ package page.sousou
 	import zhanglubin.legend.display.LSprite;
 	import zhanglubin.legend.utils.LDisplay;
 	
-	public class SouSouMapR extends LSprite
+	public class SouSouMapR extends SouSouImg
 	{
 		private var backmap:LBitmap;
 		private var _mapData:Array;

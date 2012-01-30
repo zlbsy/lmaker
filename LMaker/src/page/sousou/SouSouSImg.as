@@ -10,6 +10,7 @@ package page.sousou
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
+	import zhanglubin.legend.components.LLabel;
 	import zhanglubin.legend.display.LBitmap;
 	import zhanglubin.legend.display.LButton;
 	import zhanglubin.legend.display.LImageLoader;
@@ -20,7 +21,7 @@ package page.sousou
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
 
-	public class SouSouSImg extends LSprite
+	public class SouSouSImg extends SouSouImg
 	{
 		private const SAVE_INDEX:int = 1;
 		
@@ -82,10 +83,7 @@ package page.sousou
 			_bytesList.push(event.target.data);
 			_urlloader.die();
 			_urlloader = null;
-			var sousouSimg:SouSouSImg = new SouSouSImg(_bytesList);
-			sousouSimg.x = 10;
-			sousouSimg.y = 10;
-			
+
 			_bitSave = new LBitmap(Global.imgData[SAVE_INDEX]);
 			LFilter.setFilter(_bitSave,LFilter.GRAY);
 			_bitSave.x = 20;
@@ -97,6 +95,7 @@ package page.sousou
 			_btnSave.addEventListener(MouseEvent.MOUSE_UP,save);
 			_btnSave.visible = false;
 			
+			
 			setImageList(_bytesList);
 			imgView(0,0);
 			listScrollbar.scrollToTop();
@@ -105,7 +104,7 @@ package page.sousou
 		}
 		public function setImageList(bytesLilt:Array):void{
 			var bytesATK:ByteArray,bytesMOV:ByteArray,bytesSPC:ByteArray;
-			var i:int;
+			var i:int,lbl:LLabel
 			var bitmapdata:BitmapData;
 			var size:uint;
 			var w:uint;
@@ -122,14 +121,18 @@ package page.sousou
 				bytesSPC = bytesLilt[2];
 			}
 			
-			if(bytesATK == null || bytesMOV == null){
+			if(bytesATK == null || bytesMOV == null || bytesSPC == null){
+				/**
 				lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);
 				lbtn.name = "0";
 				lbtn.label= "图片[0]";
 				lbtn.coordinate = new Point(0,0);
 				lbtn.addEventListener(MouseEvent.MOUSE_UP,mouseUp);
+				*/
+				lbl = new LLabel();
+				lbl.text = "图片[0]";
 				listSprite = new LSprite();
-				listSprite.addChild(lbtn);
+				listSprite.addChild(lbl);
 				listScrollbar = new LScrollbar(listSprite,100,460,20,false);
 				listScrollbar.x = 12;
 				listScrollbar.y = 32;
@@ -173,6 +176,7 @@ package page.sousou
 					
 					size = w*h*4 + 8;
 				}
+				/**
 				lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);
 				lbtn.name = "0";
 				lbtn.label= "图片[0]";
@@ -180,6 +184,12 @@ package page.sousou
 				lbtn.addEventListener(MouseEvent.MOUSE_UP,mouseUp);
 				listSprite = new LSprite();
 				listSprite.addChild(lbtn);
+				*/
+				
+				lbl = new LLabel();
+				lbl.text = "图片[0]";
+				listSprite = new LSprite();
+				listSprite.addChild(lbl);
 				listScrollbar = new LScrollbar(listSprite,100,460,20,false);
 				listScrollbar.x = 12;
 				listScrollbar.y = 32;
@@ -328,25 +338,37 @@ package page.sousou
 		}
 		private function resetList():void{
 			if(listScrollbar)listScrollbar.removeFromParent();
-			var i:int;
+			var i:int,lbl:LLabel;
 			listSprite = new LSprite();
 			for(i=0;i<imglistATK.length;i++){
+				lbl = new LLabel();
+				lbl.text = "图片["+i.toString()+"]";
+				lbl.y = i*20;
+				listSprite.addChild(lbl);
+				/**
 				lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);
 				lbtn.name = i.toString();
 				lbtn.label= "图片["+i.toString()+"]";
-				lbtn.coordinate = new Point(0,i*20);
+				lbtn.coordinate = new Point(0,i*20); 
 				lbtn.addEventListener(MouseEvent.MOUSE_UP,mouseUp);
 				listSprite.addChild(lbtn);
+				*/
 			}
 			selectBit = new LBitmap(x999999Bit);
 			selectBit.alpha = 0.5;
-			selectBit.coordinate = new Point(0,i*20);
+			selectBit.y = i*20;
+			lbl = new LLabel();
+			lbl.text = "新增";
+			lbl.y = i*20;
+			listSprite.addChild(lbl);
+			/**
 			lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);
 			lbtn.name = i.toString();
 			lbtn.label= "图片["+i.toString()+"]";
 			lbtn.coordinate = new Point(0,i*20);
 			lbtn.addEventListener(MouseEvent.MOUSE_UP,mouseUp);
 			listSprite.addChild(lbtn);
+			*/
 			listSprite.addChild(selectBit);
 			listScrollbar = new LScrollbar(listSprite,100,480,20,false);
 			listScrollbar.x = 12;

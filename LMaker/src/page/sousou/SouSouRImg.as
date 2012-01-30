@@ -20,7 +20,7 @@ package page.sousou
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
 
-	public class SouSouRImg extends LSprite
+	public class SouSouRImg extends SouSouImg
 	{
 		private const SAVE_INDEX:int = 1;
 		
