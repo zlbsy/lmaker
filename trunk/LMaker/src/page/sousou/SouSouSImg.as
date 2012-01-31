@@ -27,8 +27,6 @@ package page.sousou
 		
 		private var _urlloader:LURLLoader;
 		private var _bytesList:Array;
-		private var xffffffBit:BitmapData = new BitmapData(100,20,false,0xffffff);
-		private var xccccccBit:BitmapData = new BitmapData(100,20,false,0xcccccc);
 		private var x999999Bit:BitmapData = new BitmapData(100,20,false,0x999999);
 		private var _file:FileReference;
 		private var listSprite:LSprite;
@@ -361,6 +359,7 @@ package page.sousou
 			lbl.text = "新增";
 			lbl.y = i*20;
 			listSprite.addChild(lbl);
+			LDisplay.drawRect(listSprite.graphics,[0,0,150,(i+1)*20],true,0,0);
 			/**
 			lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);
 			lbtn.name = i.toString();
@@ -372,7 +371,7 @@ package page.sousou
 			listSprite.addChild(selectBit);
 			listSprite.addEventListener(MouseEvent.MOUSE_MOVE,mousemovelist);
 			listSprite.addEventListener(MouseEvent.MOUSE_UP,mouseclicklist);
-			listSprite.addEventListener(MouseEvent.MOUSE_OUT,mouseoutlist);
+			listSprite.addEventListener(MouseEvent.ROLL_OUT,mouseoutlist);
 			listScrollbar = new LScrollbar(listSprite,100,480,20,false);
 			listScrollbar.x = 12;
 			listScrollbar.y = 32;
