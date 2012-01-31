@@ -10,6 +10,7 @@ package page.sousou
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
+	import zhanglubin.legend.components.LLabel;
 	import zhanglubin.legend.components.LTextInput;
 	import zhanglubin.legend.display.LBitmap;
 	import zhanglubin.legend.display.LButton;
@@ -28,13 +29,11 @@ package page.sousou
 		private const OPEN_INDEX:int = 2;
 		private const DELETE_INDEX:int = 3;
 		
-		private var xffffffBit:BitmapData = new BitmapData(80,20,false,0xffffff);
-		private var xccccccBit:BitmapData = new BitmapData(80,20,false,0xcccccc);
 		private var x999999Bit:BitmapData = new BitmapData(80,20,false,0x999999);
 		private var iload:LImageLoader;
 		private var _list:Array;
 		private var listSprite:LSprite;
-		private var lbtn:LButton;
+		//private var lbtn:LButton;
 		private var selectBit:LBitmap;
 		private var listScrollbar:LScrollbar;
 		private var _urlloader:LURLLoader;
@@ -56,7 +55,7 @@ package page.sousou
 		{
 			super();
 			
-			_list = Global.getFileList(Global.sousouPath + "/images/map");
+			_list = Global.getFileList(Global.sousouPath + "/images/map",".rmap");
 			init();
 		}
 		private function init():void{
@@ -161,22 +160,47 @@ package page.sousou
 			init();
 		}
 		private function addList():void{
-			var i:int;
+			var i:int,lbl:LLabel;
 			listSprite = new LSprite();
 			for(i=0;i<_list.length;i++){
+				lbl = new LLabel();
+				lbl.text = _list[i][0];
+				lbl.y = i*20;
+				listSprite.addChild(lbl);
+				/**
 				lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);
 				lbtn.name = i.toString();
 				lbtn.label= _list[i][0];
+				trace(_list[i][0]);
 				lbtn.y = i*20;
 				lbtn.addEventListener(MouseEvent.MOUSE_UP,mouseUp);
 				listSprite.addChild(lbtn);
+				 * */
 			}
-
+			
+			selectBit = new LBitmap(x999999Bit);
+			selectBit.alpha = 0.5;
+			selectBit.y = i*20;
+			listSprite.addChild(selectBit);
+			listSprite.addEventListener(MouseEvent.MOUSE_MOVE,mousemovelist);
+			listSprite.addEventListener(MouseEvent.MOUSE_UP,mouseclicklist);
+			listSprite.addEventListener(MouseEvent.ROLL_OUT,mouseoutlist);
 			listScrollbar = new LScrollbar(listSprite,80,480,20,false);
 			listScrollbar.x = 12;
 			listScrollbar.y = 32;
 			listScrollbar.scrollToBottom();
 			this.addChild(listScrollbar);
+		}
+		private function mouseclicklist(event:MouseEvent):void{
+			_selectIndex = int(event.currentTarget.mouseY/selectBit.height);
+			
+			loadMap();
+		}
+		private function mouseoutlist(event:MouseEvent):void{
+			selectBit.y = _selectIndex*selectBit.height;
+		}
+		private function mousemovelist(event:MouseEvent):void{
+			selectBit.y = int(event.currentTarget.mouseY/selectBit.height)*selectBit.height;
 		}
 		public function mouseUp(event:MouseEvent):void{
 			_selectIndex = int(event.currentTarget.name);

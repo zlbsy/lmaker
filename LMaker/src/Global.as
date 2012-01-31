@@ -19,6 +19,8 @@ package
 	{
 		private static const X:String = "X";
 		
+		public static var terrain:XML;
+		public static var terrainindex:int;
 		public static var lmaker:LMaker;
 		public static var imgData:Array;
 		public static var sousouPath:String;
@@ -37,7 +39,7 @@ package
 			file = file.resolvePath(filename);
 			file.deleteFile();
 		}
-		public static function getFileList(path:String):Array{
+		public static function getFileList(path:String,filetype:String):Array{
 			var file:File = new File(path);
 			var list:Array = new Array();
 			var arr:Array;
@@ -45,7 +47,7 @@ package
 			if(file.isDirectory){
 				arr=file.getDirectoryListing();
 				for each(child in arr){
-					if(child.type == ".rmap")list.push([child.name,child.nativePath]);
+					if(child.type == filetype)list.push([child.name,child.nativePath]);
 				}
 			}
 			return list;

@@ -176,8 +176,8 @@ package page.sousou
 			_radio.push(getRadioChild("R剧本","r_juben"));
 			_radio.push(getRadioChild("S剧本","s_juben"));
 			_radio.addEventListener(LEvent.RADIO_VALUE_CHANGE,onRadioChange);
-		//	_radio.value = "face";
-			_radio.value = "simg";
+			_radio.value = "face";
+			//_radio.value = "simg";
 			
 			this.addChild(_radio);
 		}
