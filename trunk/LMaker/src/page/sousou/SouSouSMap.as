@@ -87,7 +87,8 @@ package page.sousou
 					color = 0x999999;
 					Global.terrainindex = i;
 				}
-				LDisplay.drawRect(soTerrain.graphics,[(i%10)*_nodeSLength,int(i/10)*_nodeSLength,_nodeSLength,_nodeSLength],true,color,0.5);
+				soTerrain.graphics.lineStyle(1,0x000000,0.5);
+				LDisplay.drawRect(soTerrain.graphics,[(i%10)*_nodeSLength,int(i/10)*_nodeSLength,_nodeSLength,_nodeSLength],true,color,0.5,1);
 				txt = new LLabel();
 				strcolor = element.@color;
 				txt.htmlText = "<font size='15' color='"+strcolor.replace("0x","#")+"'><b>" + element.toString() + "</b></font>";
