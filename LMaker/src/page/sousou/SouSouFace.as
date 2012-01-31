@@ -20,7 +20,7 @@ package page.sousou
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
 
-	public class SouSouFace extends SouSouImg
+	public class SouSouFace extends LSprite
 	{
 		private var _urlloader:LURLLoader;
 		private const SAVE_INDEX:int = 1;
@@ -85,6 +85,7 @@ package page.sousou
 			var byte:ByteArray;
 			var sizebyte:ByteArray;
 			imglist = new Array();
+			this.disposeList = imglist;
 			if(bytes == null){
 				lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);
 				lbtn.name = "0";
@@ -106,7 +107,6 @@ package page.sousou
 					bytes.readBytes(byte,0,w*h*4);
 					bitmapdata.setPixels(bitmapdata.rect,byte);
 					imglist.push(bitmapdata); 
-					
 					size = w*h*4 + 8;
 				}
 				lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);

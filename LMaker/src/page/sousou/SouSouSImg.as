@@ -21,7 +21,7 @@ package page.sousou
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
 
-	public class SouSouSImg extends SouSouImg
+	public class SouSouSImg extends LSprite
 	{
 		private const SAVE_INDEX:int = 1;
 		
@@ -115,7 +115,6 @@ package page.sousou
 			imglistATK = new Array();
 			imglistMOV = new Array();
 			imglistSPC = new Array();
-			this.bitmapdataList.push(imglistATK,imglistMOV,imglistSPC);
 			if(bytesLilt != null && bytesLilt.length > 0){
 				bytesATK = bytesLilt[0];
 				bytesMOV = bytesLilt[1];
@@ -389,6 +388,12 @@ package page.sousou
 		}
 		private function mousemovelist(event:MouseEvent):void{
 			selectBit.y = int(event.currentTarget.mouseY/selectBit.height)*selectBit.height;
+		}
+		override public function die():void{
+			this.disposeList = this.imglistATK;
+			while(this.imglistMOV.length > 0)this.disposeList.push(this.imglistMOV.shift());
+			while(this.imglistSPC.length > 0)this.disposeList.push(this.imglistSPC.shift());
+			super.die();
 		}
 		public function save(event:MouseEvent):void{
 			var bytesATK:ByteArray = new ByteArray();
