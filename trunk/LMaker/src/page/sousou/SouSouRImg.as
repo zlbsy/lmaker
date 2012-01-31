@@ -20,7 +20,7 @@ package page.sousou
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
 
-	public class SouSouRImg extends SouSouImg
+	public class SouSouRImg extends LSprite
 	{
 		private const SAVE_INDEX:int = 1;
 		
@@ -130,7 +130,6 @@ package page.sousou
 					bytesR0.readBytes(byte,0,w*h*4);
 					bitmapdata.setPixels(bitmapdata.rect,byte);
 					imglistR0.push(bitmapdata); 
-					
 					size = w*h*4 + 8;
 				}
 				
@@ -160,6 +159,11 @@ package page.sousou
 				this.addChild(listScrollbar);
 				resetList();
 			}
+		}
+		override public function die():void{
+			this.disposeList = this.imglistR0;
+			while(this.imglistR1.length > 0)this.disposeList.push(this.imglistR1.shift());
+			super.die();
 		}
 		public function mouseUp(event:MouseEvent):void{
 			imgView(event.currentTarget.y,int(event.currentTarget.name));

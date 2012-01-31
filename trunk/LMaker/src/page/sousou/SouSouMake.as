@@ -22,7 +22,7 @@ package page.sousou
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
 
-	public class SouSouMake extends SouSouImg
+	public class SouSouMake extends LSprite
 	{
 		private const BTN_LABEL_SET:String = "设定游戏目录";
 		private const SELECT_TEXT:String = "请选择游戏目录";
