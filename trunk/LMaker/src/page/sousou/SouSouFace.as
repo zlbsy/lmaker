@@ -89,13 +89,6 @@ package page.sousou
 			if(bytes == null){
 				lbl = new LLabel();
 				lbl.text = "图片[0]";
-				/**
-				lbtn = new LButton(xccccccBit,x999999Bit,x999999Bit);
-				lbtn.name = "0";
-				lbtn.label= "图片[0]";
-				lbtn.coordinate = new Point(0,0);
-				lbtn.addEventListener(MouseEvent.MOUSE_UP,mouseUp);
-				*/
 				listSprite = new LSprite();
 				listSprite.addChild(lbl);
 				listScrollbar = new LScrollbar(listSprite,100,460,20,false);

@@ -52,6 +52,10 @@ package page.sousou
 		private var _windowSprite:LSprite;
 		private var soTerrain:LSprite;
 		private var _nodeSLength:int = 40;
+		private var _terrainAlphaTitle:LSprite;
+		private var _terrainAlphaNum:LLabel;
+		private var _terrainAlphaUp:LButton;
+		private var _terrainAlphaDown:LButton;
 		public function SouSouSMap()
 		{
 			super();
@@ -80,20 +84,20 @@ package page.sousou
 			var i:int = 0;
 			var txt:LLabel;
 			var color:int,strcolor:String;
-			
+			var cnt:int = 15;
 			for each(var element:XML in Global.terrain.elements()){
 				color = 0xcccccc;
-				if((i%10) == cx && int(i/10) == cy){
+				if((i%cnt) == cx && int(i/cnt) == cy){
 					color = 0x999999;
 					Global.terrainindex = i;
 				}
 				soTerrain.graphics.lineStyle(1,0x000000,0.5);
-				LDisplay.drawRect(soTerrain.graphics,[(i%10)*_nodeSLength,int(i/10)*_nodeSLength,_nodeSLength,_nodeSLength],true,color,0.5,1);
+				LDisplay.drawRect(soTerrain.graphics,[(i%cnt)*_nodeSLength,int(i/cnt)*_nodeSLength,_nodeSLength,_nodeSLength],true,color,0.5,1);
 				txt = new LLabel();
 				strcolor = element.@color;
 				txt.htmlText = "<font size='15' color='"+strcolor.replace("0x","#")+"'><b>" + element.toString() + "</b></font>";
-				txt.x = int(i%10)*_nodeSLength+(_nodeSLength/2 - txt.width/2);
-				txt.y = int(i/10)*_nodeSLength + (_nodeSLength/2 - txt.height/2 );
+				txt.x = int(i%cnt)*_nodeSLength+(_nodeSLength/2 - txt.width/2);
+				txt.y = int(i/cnt)*_nodeSLength + (_nodeSLength/2 - txt.height/2 );
 				//txt.coordinate = new Point((i%2)*_nodeSLength+(_nodeSLength/2 - txt.width/2),int(i/2)*_nodeSLength + (_nodeSLength/2 - txt.height/2 ));
 				//txt.xy = new LCoordinate((i%2)*_nodeSLength+(_nodeSLength/2 - txt.width/2),int(i/2)*_nodeSLength + (_nodeSLength/2 - txt.height/2 ));
 				soTerrain.addChild(txt);
@@ -114,6 +118,28 @@ package page.sousou
 			LDisplay.drawRect(this.graphics,[10,30,84,480],false,0x000000);
 			LDisplay.drawRect(this.graphics,[100,30,800,480],false,0x000000);
 			LDisplay.drawRect(this.graphics,[10,520,890,90],false,0x000000);
+			
+			_terrainAlphaTitle = LGlobal.getColorText(new BitmapData(10,10,false,0x000000),"地形显示透明度",18);
+			_terrainAlphaTitle.x = 750;
+			_terrainAlphaTitle.y = 530;
+			this.addChild(_terrainAlphaTitle);
+			_terrainAlphaNum = new LLabel();
+			_terrainAlphaNum.x = 820;
+			_terrainAlphaNum.y = 570;
+			this.addChild(_terrainAlphaNum);
+			changeAlpha(null);
+			_terrainAlphaUp = LGlobal.getModelButton(0,[0,0,20,20,"+",15,0x000000]);
+			_terrainAlphaUp.name = "alphaUp";
+			_terrainAlphaUp.x = 770;
+			_terrainAlphaUp.y = 570;
+			this.addChild(_terrainAlphaUp);
+			_terrainAlphaDown = LGlobal.getModelButton(0,[0,0,20,20,"-",15,0x000000]);
+			_terrainAlphaDown.name = "alphaDown";
+			_terrainAlphaDown.x = 850;
+			_terrainAlphaDown.y = 570;
+			this.addChild(_terrainAlphaDown);
+			_terrainAlphaUp.addEventListener(MouseEvent.MOUSE_UP,changeAlpha);
+			_terrainAlphaDown.addEventListener(MouseEvent.MOUSE_UP,changeAlpha);
 			
 			_bitSave = new LBitmap(Global.imgData[SAVE_INDEX]);
 			LFilter.setFilter(_bitSave,LFilter.GRAY);
@@ -141,6 +167,17 @@ package page.sousou
 			_btnDelete.visible = false;
 			
 			addList();
+		}
+		private function changeAlpha(event:MouseEvent):void{
+			if(event != null){
+				if(event.currentTarget.name == "alphaUp"){
+					if(Global.terrainAlpha < 10)Global.terrainAlpha += 1;
+				}else{
+					if(Global.terrainAlpha > 0)Global.terrainAlpha -= 1;
+				}
+			}
+			_terrainAlphaNum.htmlText = "<b>" + Global.terrainAlpha + "</b>";
+			if(_map != null)_map.setTerrain();
 		}
 		private function nameIsInput(event:MouseEvent):void{
 			var name:String = LString.trim(_nameInput.text).split(".")[0];
@@ -291,6 +328,7 @@ package page.sousou
 			_mapScrollbar = new LScrollbar(_map,780,460);
 			_mapScrollbar.x = 100;
 			_mapScrollbar.y = 30;
+			_map.setTerrain();
 			this.addChild(_mapScrollbar);
 		}
 		private function loadNewMap(event:Event):void{
