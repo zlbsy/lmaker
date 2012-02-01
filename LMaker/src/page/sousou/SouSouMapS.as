@@ -33,23 +33,8 @@ package page.sousou
 		private function onup(event:MouseEvent):void{
 			var indexX:int = Math.floor(mouseX/_nodeLength);
 			var indexY:int = Math.floor(mouseY/_nodeLength);
-			//setTerrain(indexX,indexY,Global.terrainindex)
-			/*
-			if((indexX + indexY) & 1 == 1){
-			if(mx >= my){
-			drawTriangle3(indexX + 1,indexY);
-			}else{
-			drawTriangle3(indexX,indexY + 1);
-			}
-			}else{
-			if(mx <= _nodeLength-my){
-			drawTriangle3(indexX,indexY);
-			}else{
-			drawTriangle3(indexX + 1,indexY + 1);
-			}
+			setTerrain(indexX,indexY,Global.terrainindex)
 			
-			}
-			*/
 		}
 		private function onmove(event:MouseEvent):void{
 			var indexX:int = Math.floor(mouseX/_nodeLength);
@@ -89,11 +74,11 @@ package page.sousou
 			var txt:LLabel;
 			for(i = 0;i<_mapData.length;i++){
 				for(j = 0;j<_mapData[i].length;j++){
-					//color = int(Global.terrain["Terrain" + _mapData[i][j]].@color);
-					LDisplay.drawRect(grid.graphics,[j*_nodeLength,i*_nodeLength,_nodeLength,_nodeLength],true,color,0.4);
+					color = int(Global.terrain["Terrain" + _mapData[i][j]].@color);
+					LDisplay.drawRect(grid.graphics,[j*_nodeLength,i*_nodeLength,_nodeLength,_nodeLength],true,color,Global.terrainAlpha/10);
 					LDisplay.drawRect(grid.graphics,[j*_nodeLength,i*_nodeLength,_nodeLength,_nodeLength],false,color);
 					txt = new LLabel();
-					//txt.htmlText = "<font size='15'><b>" + Global.terrain["Terrain" + _mapData[i][j]] + "</b></font>";
+					txt.htmlText = "<font size='15'><b>" + Global.terrain["Terrain" + _mapData[i][j]] + "</b></font>";
 					txt.xy = new LCoordinate(j*_nodeLength+(_nodeLength/2 - txt.width/2),i*_nodeLength + (_nodeLength/2 - txt.height/2 ));
 					grid.addChild(txt);
 				}

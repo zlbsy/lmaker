@@ -21,6 +21,7 @@ package
 		
 		public static var terrain:XML;
 		public static var terrainindex:int;
+		public static var terrainAlpha:int = 5;
 		public static var lmaker:LMaker;
 		public static var imgData:Array;
 		public static var sousouPath:String;
