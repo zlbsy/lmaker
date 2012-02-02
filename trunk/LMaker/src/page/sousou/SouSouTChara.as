@@ -6,8 +6,10 @@ package page.sousou
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
+	import flash.xml.XMLDocument;
 	
 	import zhanglubin.legend.components.LLabel;
+	import zhanglubin.legend.components.LTextInput;
 	import zhanglubin.legend.display.LBitmap;
 	import zhanglubin.legend.display.LScrollbar;
 	import zhanglubin.legend.display.LSprite;
@@ -18,7 +20,8 @@ package page.sousou
 	{
 		private var x999999Bit:BitmapData = new BitmapData(100,20,false,0x999999);
 		private var _urlloader:LURLLoader;
-		private var _chara:XML;
+		private var _chara:Array;
+		private var _charaXml:XML;
 		private var listSprite:LSprite;
 		private var listScrollbar:LScrollbar;
 		private var selectBit:LBitmap;
@@ -27,6 +30,7 @@ package page.sousou
 		private var bitSprite:LSprite;
 		private var bitScrollbar:LScrollbar;
 		private var _facelist:Array;
+		private var _charaIndex:int;
 		public function SouSouTChara()
 		{
 			super();
@@ -41,10 +45,10 @@ package page.sousou
 			_urlloader.load(new URLRequest(Global.sousouPath+"/initialization/chara.sgj"))
 		}
 		private function loadTCharaOver(event:Event):void{
-			trace("event.target.data = " + event.target.data);
+			//trace("event.target.data = " + event.target.data);
 			_urlloader.die();
 			_urlloader = null;
-			_chara = new XML(event.target.data);
+			_charaXml = new XML(event.target.data);
 			
 			_urlloader = new LURLLoader();
 			_urlloader.addEventListener(Event.COMPLETE,loadFaceOver);
@@ -54,42 +58,22 @@ package page.sousou
 		private function loadFaceOver(event:Event):void{
 			_urlloader.die();
 			_urlloader = null;
-			var lbl:LLabel,i:int,bitmapdata:BitmapData;
+			var lbl:LLabel,i:int,bitmapdata:BitmapData,size:int,w:int,h:int,byte:ByteArray;
 			var bytes:ByteArray = event.target.data;
 			_facelist = new Array();
 			this.disposeList = _facelist;
-			/**
-			if(bytes == null){
-				lbl = new LLabel();
-				lbl.text = "图片[0]";
-				listSprite = new LSprite();
-				listSprite.addChild(lbl);
-				listScrollbar = new LScrollbar(listSprite,100,460,20,false);
-				listScrollbar.x = 12;
-				listScrollbar.y = 32;
-				this.addChild(listScrollbar);
-			}else{
-				for(i=0;i<bytes.length;i+=size){
-					w = bytes.readUnsignedInt();
-					h = bytes.readUnsignedInt();
-					bitmapdata = new BitmapData(w,h);
-					byte = new ByteArray();
-					bytes.readBytes(byte,0,w*h*4);
-					bitmapdata.setPixels(bitmapdata.rect,byte);
-					_facelist.push(bitmapdata); 
-					size = w*h*4 + 8;
-				}
-				lbl = new LLabel();
-				lbl.text = "图片[0]";
-				listSprite = new LSprite();
-				listSprite.addChild(lbl);
-				listScrollbar = new LScrollbar(listSprite,100,460,20,false);
-				listScrollbar.x = 12;
-				listScrollbar.y = 32;
-				this.addChild(listScrollbar);
-				resetList();
+			bytes.uncompress();
+			for(i=0;i<bytes.length;i+=size){
+				w = bytes.readUnsignedInt();
+				h = bytes.readUnsignedInt();
+				bitmapdata = new BitmapData(w,h);
+				byte = new ByteArray();
+				bytes.readBytes(byte,0,w*h*4);
+				bitmapdata.setPixels(bitmapdata.rect,byte);
+				_facelist.push(bitmapdata); 
+				size = w*h*4 + 8;
 			}
-			*/
+			
 			setCharaList();
 			view(0,0);
 			listScrollbar.scrollToTop();
@@ -102,12 +86,14 @@ package page.sousou
 			var h:uint;
 			var lbl:LLabel,element:XML;
 			var byte:ByteArray;
+			_chara = new Array();
 			listSprite = new LSprite();
-			for each(element in this._chara.elements()){
+			for each(element in this._charaXml.elements()){
 				lbl = new LLabel();
 				lbl.text = element.Name;
 				lbl.y = i*20;
 				listSprite.addChild(lbl);
+				_chara.push(element);
 				i++;
 			}
 			selectBit = new LBitmap(x999999Bit);
@@ -118,18 +104,27 @@ package page.sousou
 			lbl.y = i*20;
 			listSprite.addChild(lbl);
 			listSprite.addChild(selectBit);
-			//listSprite.addEventListener(MouseEvent.MOUSE_MOVE,mousemovelist);
-			//listSprite.addEventListener(MouseEvent.MOUSE_UP,mouseclicklist);
-			//listSprite.addEventListener(MouseEvent.ROLL_OUT,mouseoutlist);
+			listSprite.addEventListener(MouseEvent.MOUSE_MOVE,mousemovelist);
+			listSprite.addEventListener(MouseEvent.MOUSE_UP,mouseclicklist);
+			listSprite.addEventListener(MouseEvent.ROLL_OUT,mouseoutlist);
 			listScrollbar = new LScrollbar(listSprite,100,480,20,false);
 			listScrollbar.x = 12;
 			listScrollbar.y = 32;
 			listScrollbar.scrollToBottom();
 			this.addChild(listScrollbar);
-			
-			
+		}
+		private function mouseclicklist(event:MouseEvent):void{
+			var i:int = int(event.currentTarget.mouseY/selectBit.height);
+			view(0,i);
+		}
+		private function mouseoutlist(event:MouseEvent):void{
+			selectBit.y = _charaIndex*selectBit.height;
+		}
+		private function mousemovelist(event:MouseEvent):void{
+			selectBit.y = int(event.currentTarget.mouseY/selectBit.height)*selectBit.height;
 		}
 		public function view(by:int,bindex:int):void{
+			_charaIndex = bindex;
 			if(viewSprite != null){
 				viewSprite.removeFromParent();
 			}
@@ -138,50 +133,35 @@ package page.sousou
 				selectBit.alpha = 0.5;
 			}
 			selectBit.y = by;
+			
 			viewSprite = new LSprite(); 
-			LDisplay.drawRectGradient(viewSprite.graphics,[22,62,120,120],[0xffffff,0x000000]);
+			LDisplay.drawLine(viewSprite.graphics,[0,40,650,40]);
+			LDisplay.drawRectGradient(viewSprite.graphics,[10,50,120,120],[0xffffff,0x000000]);
 			viewSprite.x = 140;
-			viewSprite.y = 60;
+			viewSprite.y = 30;
 			this.addChild(viewSprite);
+			//头像
+			viewFace();
 			
-			
-			/**
+			var charaName:LTextInput = new LTextInput();
+			charaName.text = _chara[_charaIndex].Name;
+			charaName.x = 10;
+			charaName.y= 180;
+			viewSprite.addChild(charaName);
+		}
+		/**
+		 *头像
+		 **/
+		private function viewFace():void{
+			var index:int = _chara[_charaIndex].Face;
 			bitView = new LBitmap();
+			bitView.bitmapData = _facelist[index];
 			bitSprite = new LSprite();
 			bitSprite.addChild(bitView);
 			bitScrollbar=new LScrollbar(bitSprite,600,400);
-			bitScrollbar.x = 22;
-			bitScrollbar.y= 62;
+			bitScrollbar.x = 10;
+			bitScrollbar.y= 50;
 			viewSprite.addChild(bitScrollbar);
-			LDisplay.drawLine(viewSprite.graphics,[0,40,650,40]);
-			bitView.bitmapData = _facelist[imgIndex];
-			bitView = new LBitmap();
-			bitSprite = new LSprite();
-			bitSprite.addChild(bitView);
-			bitScrollbar=new LScrollbar(bitSprite,600,400);
-			bitScrollbar.x = 22;
-			bitScrollbar.y= 62;
-			viewSprite.addChild(bitScrollbar);
-			LDisplay.drawLine(viewSprite.graphics,[0,40,650,40]);
-			
-			//lbtn = LGlobal.getModelButton(0,[0,0,80,20,"载入图片",15,0x0000ff]);
-			lbtn = new LButton(Global.imgData[2]);
-			lbtn.name = "new";
-			lbtn.coordinate = new Point(40,10);
-			lbtn.addEventListener(MouseEvent.MOUSE_UP,loadimg);
-			viewSprite.addChild(lbtn);
-			
-			imgIndex = bindex;
-			if(imgIndex < _facelist.length){
-				//lbtn = LGlobal.getModelButton(0,[0,0,80,20,"删除图片",15,0x0000ff]);
-				lbtn = new LButton(Global.imgData[3]);
-				lbtn.name = "delete";
-				lbtn.coordinate = new Point(100,10);
-				lbtn.addEventListener(MouseEvent.MOUSE_UP,deleteimg);
-				viewSprite.addChild(lbtn);
-				bitView.bitmapData = _facelist[imgIndex];
-			}
-			*/
 		}
 	}
 }
