@@ -273,6 +273,7 @@ package page.sousou
 			listSprite.addEventListener(MouseEvent.MOUSE_MOVE,mousemovelist);
 			listSprite.addEventListener(MouseEvent.MOUSE_UP,mouseclicklist);
 			listSprite.addEventListener(MouseEvent.ROLL_OUT,mouseoutlist);
+			LDisplay.drawRect(listSprite.graphics,[0,0,150,(i+1)*20],true,0,0);
 			listScrollbar = new LScrollbar(listSprite,80,480,20,false);
 			listScrollbar.x = 12;
 			listScrollbar.y = 32;
@@ -280,7 +281,7 @@ package page.sousou
 			this.addChild(listScrollbar);
 		}
 		private function mouseclicklist(event:MouseEvent):void{
-			_selectIndex = int(event.currentTarget.name);
+			_selectIndex = int(event.currentTarget.mouseY/selectBit.height);
 			
 			loadMap();
 		}
@@ -289,11 +290,6 @@ package page.sousou
 		}
 		private function mousemovelist(event:MouseEvent):void{
 			selectBit.y = int(event.currentTarget.mouseY/selectBit.height)*selectBit.height;
-		}
-		public function mouseUp(event:MouseEvent):void{
-			_selectIndex = int(event.currentTarget.name);
-			
-			loadMap();
 		}
 		private function loadMap():void{
 			var name:String = _list[_selectIndex][1];

@@ -175,7 +175,7 @@ package page.sousou
 			_radio.push(getRadioChild("地形数据","t_terrain"));
 			_radio.push(getRadioChild("R剧本","r_juben"));
 			_radio.push(getRadioChild("S剧本","s_juben"));
-			_radio.addEventListener(LEvent.RADIO_VALUE_CHANGE,onRadioChange);
+			_radio.addEventListener(LEvent.CHANGE_VALUE,onRadioChange);
 			_radio.value = "t_chara";
 			
 			this.addChild(_radio);
