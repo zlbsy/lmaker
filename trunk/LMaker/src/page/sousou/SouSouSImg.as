@@ -380,7 +380,7 @@ package page.sousou
 		}
 		private function mouseclicklist(event:MouseEvent):void{
 			var i:int = int(event.currentTarget.mouseY/selectBit.height);
-			imgView(0,i);
+			imgView(i*20,i);
 		}
 		private function mouseoutlist(event:MouseEvent):void{
 			selectBit.y = imgIndex*selectBit.height;

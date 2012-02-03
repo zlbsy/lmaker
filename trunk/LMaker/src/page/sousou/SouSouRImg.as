@@ -305,6 +305,7 @@ package page.sousou
 			listSprite.addEventListener(MouseEvent.MOUSE_MOVE,mousemovelist);
 			listSprite.addEventListener(MouseEvent.MOUSE_UP,mouseclicklist);
 			listSprite.addEventListener(MouseEvent.ROLL_OUT,mouseoutlist);
+			LDisplay.drawRect(listSprite.graphics,[0,0,150,(i+1)*20],true,0,0);
 			listScrollbar = new LScrollbar(listSprite,100,480,20,false);
 			listScrollbar.x = 12;
 			listScrollbar.y = 32;
@@ -313,7 +314,7 @@ package page.sousou
 		}
 		private function mouseclicklist(event:MouseEvent):void{
 			var i:int = int(event.currentTarget.mouseY/selectBit.height);
-			imgView(0,i);
+			imgView(i*20,i);
 		}
 		private function mouseoutlist(event:MouseEvent):void{
 			selectBit.y = imgIndex*selectBit.height;
