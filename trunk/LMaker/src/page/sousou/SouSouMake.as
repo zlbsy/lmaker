@@ -176,7 +176,7 @@ package page.sousou
 			_radio.push(getRadioChild("R剧本","r_juben"));
 			_radio.push(getRadioChild("S剧本","s_juben"));
 			_radio.addEventListener(LEvent.CHANGE_VALUE,onRadioChange);
-			_radio.value = "t_chara";
+			_radio.value = "t_arms";
 			
 			this.addChild(_radio);
 		}
@@ -224,6 +224,13 @@ package page.sousou
 					sousouTChara.x = 10;
 					sousouTChara.y = 10;
 					_ctrlSprite.addChild(sousouTChara);
+					break;
+				case "t_arms":
+					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
+					var sousouTArms:SouSouTArms = new SouSouTArms();
+					sousouTArms.x = 10;
+					sousouTArms.y = 10;
+					_ctrlSprite.addChild(sousouTArms);
 					break;
 					break;
 			}
