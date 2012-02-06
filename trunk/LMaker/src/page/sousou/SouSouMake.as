@@ -164,25 +164,47 @@ package page.sousou
 			_radio.push(getRadioChild("头像","face"));
 			_radio.push(getRadioChild("R形象","rimg"));
 			_radio.push(getRadioChild("S形象","simg"));
+			_radio.push(getRadioChild("法术图片","strategy_img2"));
 			_radio.push(getRadioChild("R地图","rmap"));
 			_radio.push(getRadioChild("S地图","smap"));
 			_radio.push(getRadioChild("人物数据","t_chara"));
 			_radio.push(getRadioChild("兵种数据","t_arms"));
 			_radio.push(getRadioChild("装备数据","t_item"));
 			_radio.push(getRadioChild("物品数据","t_props"));
-			_radio.push(getRadioChild("特技数据","t_skill"));
-			_radio.push(getRadioChild("法术数据","t_strategy"));
+			/**_radio.push(getRadioChild("特技数据","t_skill"));
+			_radio.push(getRadioChild("法术数据","t_strategy"));*/
 			_radio.push(getRadioChild("地形数据","t_terrain"));
 			_radio.push(getRadioChild("R剧本","r_juben"));
 			_radio.push(getRadioChild("S剧本","s_juben"));
 			_radio.addEventListener(LEvent.CHANGE_VALUE,onRadioChange);
-			_radio.value = "t_arms";
+			_radio.value = "strategy_img2";
 			
 			this.addChild(_radio);
 		}
 		private function onRadioChange(event:LEvent):void{
 			_ctrlSprite.die();
 			switch(_radio.value){
+				case "strategy_img2":
+					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
+					var sousouStrategyImg2:SouSouStrategyImg2 = new SouSouStrategyImg2();
+					sousouStrategyImg2.x = 10;
+					sousouStrategyImg2.y = 10;
+					_ctrlSprite.addChild(sousouStrategyImg2);
+					break;
+				case "t_props":
+					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
+					var sousouProps:SouSouTProps = new SouSouTProps();
+					sousouProps.x = 10;
+					sousouProps.y = 10;
+					_ctrlSprite.addChild(sousouProps);
+					break;
+				case "t_item":
+					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
+					var sousouItem:SouSouTItem = new SouSouTItem();
+					sousouItem.x = 10;
+					sousouItem.y = 10;
+					_ctrlSprite.addChild(sousouItem);
+					break;
 				case "face":
 					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
 					var sousouFace:SouSouFace = new SouSouFace();
