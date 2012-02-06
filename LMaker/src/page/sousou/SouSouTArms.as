@@ -31,6 +31,8 @@ package page.sousou
 		private var _armsXml:XML;
 		private var _terrain:Array;
 		private var _terrainXml:XML;
+		private var _strategy:Array;
+		private var _strategyXml:XML;
 		private var listSprite:LSprite;
 		private var listScrollbar:LScrollbar;
 		private var scrollLayer:LScrollbar;
@@ -47,6 +49,19 @@ package page.sousou
 			LDisplay.drawRect(this.graphics,[0,20,800,500],false,0x000000);
 			LDisplay.drawRect(this.graphics,[10,30,124,484],false,0x000000);
 			LDisplay.drawRect(this.graphics,[140,30,650,484],false,0x000000);
+			
+			_urlloader = new LURLLoader();
+			_urlloader.addEventListener(Event.COMPLETE,loadTStrategyOver);
+			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+			_urlloader.load(new URLRequest(Global.sousouPath + "/initialization/Strategy.sgj"));
+		}
+		private function loadTStrategyOver(event:Event):void{
+			_urlloader.die();
+			_urlloader = null;
+			_strategyXml = new XML(event.target.data);
+			_strategy = new Array();
+			var element:XML;
+			for each(element in this._strategyXml.elements())_strategy.push(element);
 			
 			_urlloader = new LURLLoader();
 			_urlloader.addEventListener(Event.COMPLETE,loadTTerrainOver);
@@ -571,9 +586,49 @@ package page.sousou
 		private function changeValue(event:LEvent):void{
 			if(event.currentTarget.value == "restrain"){
 				setScrollRestrain();
-			}else{
+			}else if(event.currentTarget.value == "terrain"){
 				setScrollTerrain();
+			}else{
+				setScrollStrategy();
 			}
+		}
+		private function setScrollStrategy():void{
+			if(scrollLayer != null)scrollLayer.removeFromParent();
+			trace("setScrollStrategy run");
+			var spriteStrategy:LSprite = new LSprite();
+			var i:int,j:int,lblStrategy:LLabel,inputStrategy:LTextInput,intStrategy:int,selectStrategy:LComboBox,element:XML,strategyIndex:int;
+			var restrainArray:Array = new Array();
+			for(i=0;i<_strategy.length;i++){
+				intStrategy = -1;
+				lblStrategy = new LLabel();
+				lblStrategy.text = _strategy[i].Name;
+				lblStrategy.y = i*25;
+				spriteStrategy.addChild(lblStrategy);
+				inputStrategy = new LTextInput();
+				inputStrategy.width = 30;
+				inputStrategy.x = 55;
+				inputStrategy.y = i*25;
+				for each(element in _arms[_armsIndex]["Strategy"].elements()){
+					if(int(element) != (i + 1))continue;
+					if(this._strategyXml["Strategy" + element] != null && (this._strategyXml["Strategy" + element].toString()).length){
+						intStrategy = element.@lv;
+						break;
+					}
+				}
+				inputStrategy.text = intStrategy.toString();
+				spriteStrategy.addChild(inputStrategy);
+				lblStrategy = new LLabel();
+				lblStrategy.text = "lv";
+				lblStrategy.x = 85;
+				lblStrategy.y = i*25;
+				spriteStrategy.addChild(lblStrategy);
+				restrainArray.push(lblStrategy);
+			}
+			scrollLayer = new LScrollbar(spriteStrategy,210,440,20,false);
+			LDisplay.drawRect(scrollLayer.graphics,[0,0,210,440]);
+			scrollLayer.x = 190;
+			scrollLayer.y = 25;
+			viewSprite.addChild(scrollLayer);
 		}
 		private function setScrollTerrain():void{
 			if(scrollLayer != null)scrollLayer.removeFromParent();

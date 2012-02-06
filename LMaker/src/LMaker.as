@@ -6,8 +6,10 @@ package
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
+	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
+	import flash.utils.ByteArray;
 	
 	import page.logo.Logo;
 	import page.sousou.SouSouMake;
@@ -16,6 +18,7 @@ package
 	import zhanglubin.legend.display.LButton;
 	import zhanglubin.legend.display.LImageLoader;
 	import zhanglubin.legend.display.LSprite;
+	import zhanglubin.legend.display.LURLLoader;
 	import zhanglubin.legend.utils.LDisplay;
 	import zhanglubin.legend.utils.LFilter;
 	import zhanglubin.legend.utils.LGlobal;
