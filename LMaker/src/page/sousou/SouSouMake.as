@@ -165,6 +165,8 @@ package page.sousou
 			_radio.push(getRadioChild("R形象","rimg"));
 			_radio.push(getRadioChild("S形象","simg"));
 			_radio.push(getRadioChild("法术图片","strategy_img2"));
+			_radio.push(getRadioChild("装备图片","item_img2"));
+			_radio.push(getRadioChild("系统图片","img_img2"));
 			_radio.push(getRadioChild("R地图","rmap"));
 			_radio.push(getRadioChild("S地图","smap"));
 			_radio.push(getRadioChild("人物数据","t_chara"));
@@ -177,13 +179,20 @@ package page.sousou
 			_radio.push(getRadioChild("R剧本","r_juben"));
 			_radio.push(getRadioChild("S剧本","s_juben"));
 			_radio.addEventListener(LEvent.CHANGE_VALUE,onRadioChange);
-			_radio.value = "strategy_img2";
+			_radio.value = "item_img2";
 			
 			this.addChild(_radio);
 		}
 		private function onRadioChange(event:LEvent):void{
 			_ctrlSprite.die();
 			switch(_radio.value){
+				case "item_img2":
+					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
+					var sousouItemImg2:SouSouItemImg2 = new SouSouItemImg2();
+					sousouItemImg2.x = 10;
+					sousouItemImg2.y = 10;
+					_ctrlSprite.addChild(sousouItemImg2);
+					break;
 				case "strategy_img2":
 					LDisplay.drawRectGradient(_ctrlSprite.graphics,[0,0,LGlobal.stage.stageWidth - _ctrlSprite.x,LGlobal.stage.stageHeight - Global.lmaker.title.height - _barSprite.height],[0xcccccc,0x999999]);
 					var sousouStrategyImg2:SouSouStrategyImg2 = new SouSouStrategyImg2();

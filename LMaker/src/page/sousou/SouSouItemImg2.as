@@ -23,7 +23,7 @@ package page.sousou
 	import zhanglubin.legend.utils.LGlobal;
 	import zhanglubin.legend.utils.LString;
 
-	public class SouSouStrategyImg2 extends LSprite
+	public class SouSouItemImg2 extends LSprite
 	{
 		private var _urlloader:LURLLoader;
 		private const SAVE_INDEX:int = 1;
@@ -44,7 +44,7 @@ package page.sousou
 		private var _btnSave:LButton;
 		private var _bitSave:LBitmap;
 		private var _bitName:LTextInput;
-		public function SouSouStrategyImg2(bytes:ByteArray = null)
+		public function SouSouItemImg2(bytes:ByteArray = null)
 		{ 
 			super();
 			LDisplay.drawRectGradient(this.graphics,[0,20,800,500],[0xffffff,0x8A98F4]);
@@ -52,7 +52,7 @@ package page.sousou
 			LDisplay.drawRect(this.graphics,[10,30,124,484],false,0x000000);
 			LDisplay.drawRect(this.graphics,[140,30,650,484],false,0x000000);
 			/**
-			if(!Global.exists(Global.sousouPath+"/images","strategy.limg2")){
+			if(!Global.exists(Global.sousouPath+"/images","item.limg2")){
 				trace("new");
 				var bytes:ByteArray = new ByteArray();
 				var bitmapdata:BitmapData;
@@ -67,13 +67,12 @@ package page.sousou
 				bytes.writeUnsignedInt(bitmapdata.height);
 				bytes.writeBytes(byte);
 				bytes.compress();
-				Global.saveBytesData(Global.sousouPath + "/images","strategy.limg2",bytes);
-			}
-			return;*/
+				Global.saveBytesData(Global.sousouPath + "/images","item.limg2",bytes);
+			}*/
 			_urlloader = new LURLLoader();
 			_urlloader.addEventListener(Event.COMPLETE,loadStrategyImgOver);
 			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
-			_urlloader.load(new URLRequest(Global.sousouPath+"/images/meff.limg2"));
+			_urlloader.load(new URLRequest(Global.sousouPath+"/images/item.limg2"));
 			
 		}
 		private function loadStrategyImgOver(event:Event):void{
@@ -297,7 +296,7 @@ package page.sousou
 				bytes.writeBytes(byte);
 			}
 			bytes.compress();
-			Global.saveBytesData(Global.sousouPath + "/images","meff.limg2",bytes);
+			Global.saveBytesData(Global.sousouPath + "/images","item.limg2",bytes);
 			this._btnSave.visible = false;
 		}
 	}
