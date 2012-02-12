@@ -25,6 +25,7 @@ package page.sousou
 	
 	public class SouSouTItem extends LSprite
 	{
+		private const SAVE_INDEX:int = 1;
 		private var x999999Bit:BitmapData = new BitmapData(100,20,false,0x999999);
 		private var _urlloader:LURLLoader;
 		private var _arms:Array;
@@ -42,6 +43,11 @@ package page.sousou
 		private var viewSprite:LSprite;
 		private var viewMenuSprite:LSprite;
 		private var rangeArray:Array;
+		private var _bitView:LBitmap;
+		private var _selectView:LComboBox;
+		private var imglist:Array;
+		private var _btnSave:LButton;
+		private var _bitSave:LBitmap;
 		public function SouSouTItem()
 		{
 			super();
@@ -50,12 +56,14 @@ package page.sousou
 			LDisplay.drawRect(this.graphics,[10,30,124,484],false,0x000000);
 			LDisplay.drawRect(this.graphics,[140,30,650,484],false,0x000000);
 			
+			
+			
 			_urlloader = new LURLLoader();
-			_urlloader.addEventListener(Event.COMPLETE,loadTTerrainOver);
+			_urlloader.addEventListener(Event.COMPLETE,loadTArmsOver);
 			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
 			_urlloader.load(new URLRequest(Global.sousouPath+"/initialization/Arms.sgj"));
 		}
-		private function loadTTerrainOver(event:Event):void{
+		private function loadTArmsOver(event:Event):void{
 			_urlloader.die();
 			_urlloader = null;
 			_armsXml = new XML(event.target.data);
@@ -67,15 +75,65 @@ package page.sousou
 			_urlloader = new LURLLoader();
 			_urlloader.addEventListener(Event.COMPLETE,loadTItemOver);
 			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
-			_urlloader.load(new URLRequest(Global.sousouPath + "/initialization/Item.sgj"));
+			_urlloader.load(new URLRequest(Global.sousouPath+"/initialization/Item.sgj"));
+		}
+		private function loadItemImgOver(event:Event):void{
+			_urlloader.die();
+			_urlloader = null;
+			var bytes:ByteArray = ByteArray(event.target.data);
+			bytes.uncompress();
+			var i:int;
+			var bitmapdata:BitmapData;
+			var size:uint;
+			var limg2:String;
+			var l:uint,w:uint,h:uint;
+			var byte:ByteArray;
+			var sizebyte:ByteArray;
+			var lbl:LLabel;
+			imglist = new Array();
+			for(i=0;i<bytes.length;i+=size){
+				l = bytes.readUnsignedInt();
+				limg2 = bytes.readUTFBytes(l);
+				w = bytes.readUnsignedInt();
+				h = bytes.readUnsignedInt();
+				bitmapdata = new BitmapData(w,h);
+				byte = new ByteArray();
+				bytes.readBytes(byte,0,w*h*4);
+				bitmapdata.setPixels(bitmapdata.rect,byte);
+				imglist[limg2] = bitmapdata;
+				//imglist.push([limg2,bitmapdata]); 
+				size = l + w*h*4 + 12;
+			}
+			
+			_bitSave = new LBitmap(Global.imgData[SAVE_INDEX]);
+			LFilter.setFilter(_bitSave,LFilter.GRAY);
+			_bitSave.x = 20;
+			this.addChild(_bitSave);
+			
+			_btnSave = new LButton(Global.imgData[SAVE_INDEX]);
+			_btnSave.x = 20;
+			this.addChild(_btnSave);
+			_btnSave.addEventListener(MouseEvent.MOUSE_UP,save);
+			_btnSave.visible = false;
+			
+			view(0,0);
+			listScrollbar.scrollToTop();
+		}
+		public function save(event:MouseEvent):void{}
+		private function imgChange(event:Event):void{
+			_bitView.bitmapData = imglist[_selectView.value] as BitmapData;
 		}
 		private function loadTItemOver(event:Event):void{
 			_urlloader.die();
 			_urlloader = null;
 			_itemXml = new XML(event.target.data);
 			setItemList();
-			view(0,0);
-			listScrollbar.scrollToTop();
+			
+			_urlloader = new LURLLoader();
+			_urlloader.addEventListener(Event.COMPLETE,loadItemImgOver);
+			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
+			_urlloader.load(new URLRequest(Global.sousouPath+"/images/item.limg2"));
+			
 		}
 		public function setItemList():void{
 			var i:int;
@@ -145,7 +203,13 @@ package page.sousou
 			viewMenuSprite.y = viewSprite.y;
 			this.addChild(viewSprite);
 			this.addChild(viewMenuSprite);
-			//LDisplay.drawRectGradient(viewSprite.graphics,[450,30,130,130],[0xcccccc,0x333333]);
+			LDisplay.drawRectGradient(viewSprite.graphics,[200,30,130,130],[0xcccccc,0x333333]);
+			
+			_bitView = new LBitmap(new BitmapData(64,64));
+			_bitView.bitmapData = null;
+			_bitView.x = 220;
+			_bitView.y= 50;
+			viewSprite.addChild(_bitView);
 			
 			if(_itemIndex >= _item.length){
 				var xml:XML = <Item>
@@ -170,6 +234,17 @@ package page.sousou
 				_itemXml.appendChild(xml); 
 				setItemList();
 			}
+			
+			_selectView = new LComboBox(new BitmapData(80,20,false,0x999999));
+			for(var namestr:String in imglist){
+				_selectView.push(namestr,namestr);
+			}
+			this._selectView.value = _item[_itemIndex].Icon;
+			imgChange(null);
+			_selectView.x = 70;
+			_selectView.y= 50;
+			_selectView.addEventListener(LEvent.CHANGE_VALUE,imgChange);
+			viewMenuSprite.addChild(_selectView);
 			
 			var i:int;
 			var lblx:int = 10,inputx:int = 70,lbly:int = 170,showIndex:int = 0;

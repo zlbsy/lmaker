@@ -201,7 +201,9 @@ package page.sousou
 				viewSprite.addChild(_bitName);
 				imglist.push([_bitName.text,bitView.bitmapData]);
 			}
+			var saveY:int = this.listScrollbar.scrollY;
 			this.resetList();
+			this.listScrollbar.scrollY = saveY;
 			selectBit.y = imgIndex*selectBit.height;
 		}
 		public function deleteimg(event:MouseEvent):void{
@@ -266,7 +268,10 @@ package page.sousou
 			this.addChild(listScrollbar);
 		}
 		private function mouseclicklist(event:MouseEvent):void{
-			this.imglist[imgIndex][0] = _bitName.text;
+			if(this.imglist[imgIndex][0] != _bitName.text){
+				this.imglist[imgIndex][0] = _bitName.text;
+				this._btnSave.visible = true;
+			}
 			
 			var i:int = int(event.currentTarget.mouseY/selectBit.height);
 			imgView(i*20,i);

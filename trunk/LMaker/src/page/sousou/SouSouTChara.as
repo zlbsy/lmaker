@@ -293,6 +293,7 @@ package page.sousou
 		 **/
 		private function viewS():void{
 			var index:int = _chara[_charaIndex].S;
+			if(index >= _slist.length)index = 0;
 			bitS = new LBitmap(new BitmapData(48,48));
 			bitS.bitmapData = LImage.getBitmapDataByDraw(_slist[index],0,48*6,48,48);
 			bitS.x = 270;
@@ -317,6 +318,7 @@ package page.sousou
 		 **/
 		private function viewR():void{
 			var index:int = _chara[_charaIndex].R;
+			if(index >= _rlist.length)index = 0;
 			bitR = new LBitmap(new BitmapData(64,64));
 			bitR.bitmapData = LImage.getBitmapDataByDraw(_rlist[index],0,0,64,64);
 			bitR.x = 150;
