@@ -25,8 +25,8 @@ package page.sousou
 
 	public class SouSouItemImg2 extends LSprite
 	{
-		private var _urlloader:LURLLoader;
 		private const SAVE_INDEX:int = 1;
+		private var _urlloader:LURLLoader;
 		private var x999999Bit:BitmapData = new BitmapData(100,20,false,0x999999);
 		private var _file:FileReference;
 		private var listSprite:LSprite;
@@ -70,12 +70,12 @@ package page.sousou
 				Global.saveBytesData(Global.sousouPath + "/images","item.limg2",bytes);
 			}*/
 			_urlloader = new LURLLoader();
-			_urlloader.addEventListener(Event.COMPLETE,loadStrategyImgOver);
+			_urlloader.addEventListener(Event.COMPLETE,loadItemImgOver);
 			_urlloader.dataFormat = URLLoaderDataFormat.BINARY;
 			_urlloader.load(new URLRequest(Global.sousouPath+"/images/item.limg2"));
 			
 		}
-		private function loadStrategyImgOver(event:Event):void{
+		private function loadItemImgOver(event:Event):void{
 			_urlloader.die();
 			_urlloader = null;
 			
@@ -265,6 +265,7 @@ package page.sousou
 			this.addChild(listScrollbar);
 		}
 		private function mouseclicklist(event:MouseEvent):void{
+			if(this.imglist[imgIndex][0] != _bitName.text)this._btnSave.visible = true;
 			this.imglist[imgIndex][0] = _bitName.text;
 			
 			var i:int = int(event.currentTarget.mouseY/selectBit.height);
