@@ -39,7 +39,7 @@ package page.sousou
 		private function onmove(event:MouseEvent):void{
 			var indexX:int = Math.floor(mouseX/_nodeLength);
 			var indexY:int = Math.floor(mouseY/_nodeLength);
-			//Global.coordinate.text = "(" + indexX + "," +indexY + ")";
+			(((this.parent as LSprite).parent as LSprite).parent as SouSouSMap).terrainCoo.text = indexX + "," +indexY;
 		}
 		public function get bitmapdata():BitmapData{
 			return this.backmap.bitmapData;

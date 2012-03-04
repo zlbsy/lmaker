@@ -53,6 +53,8 @@ package page.sousou
 			return mapdata;
 		}
 		private function showCoo(cx:int,cy:int):void{
+			(((this.parent as LSprite).parent as LSprite).parent as SouSouRMap).terrainCoo.text = cx + "," +cy;
+			
 			//trace(cx,cy);
 			//Global.coordinate.text = "(" + cx + "," +cy + ")";
 		}

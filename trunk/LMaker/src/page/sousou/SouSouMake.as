@@ -102,7 +102,7 @@ package page.sousou
 					break;
 				}
 			}
-			if(_sousouPath.length > 0 && Global.isDirectory(_sousouPath)){
+			if(_sousouPath && _sousouPath.length > 0 && Global.isDirectory(_sousouPath)){
 				initSouSou();
 			}
 		}
@@ -116,12 +116,14 @@ package page.sousou
 					break;
 				}
 			}
+			trace(STR_EMPTY,FILE_LMAKER_INI_NAME,_iniArray.join(STR_ENTER));
 			Global.saveAppData(STR_EMPTY,FILE_LMAKER_INI_NAME,_iniArray.join(STR_ENTER));
 			initSouSou();
 		}
 		private function initSouSou():void{
+			trace(this._sousouPath,FILE_GAME_INI_NAME);
 			if(!Global.exists(this._sousouPath,FILE_GAME_INI_NAME)){
-				Global.showMsg(ERROR_TITLE,"路径不正确，或者游戏版本不正确。\n请重新设置正确的游戏路径。");
+				Global.showMsg(ERROR_TITLE,"路径不正确，或游戏版本不正确。\n请重新设置正确的游戏路径。");
 				return;
 			}
 			_urlloader = new LURLLoader();
