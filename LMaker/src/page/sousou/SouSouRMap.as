@@ -51,6 +51,8 @@ package page.sousou
 		private var _nameInput:LTextInput;
 		private var _inputButton:LButton;
 		private var _windowSprite:LSprite;
+		private var _terrainCooTitle:LSprite;
+		private var _terrainCoo:LLabel;
 		public function SouSouRMap()
 		{
 			super();
@@ -58,11 +60,32 @@ package page.sousou
 			_list = Global.getFileList(Global.sousouPath + "/images/map",".rmap");
 			init();
 		}
+
+		public function get terrainCoo():LLabel
+		{
+			return _terrainCoo;
+		}
+
+		public function set terrainCoo(value:LLabel):void
+		{
+			_terrainCoo = value;
+		}
+
 		private function init():void{
 			LDisplay.drawRectGradient(this.graphics,[0,20,910,500],[0xffffff,0x8A98F4]);
 			LDisplay.drawRect(this.graphics,[0,20,910,500],false,0x000000);
 			LDisplay.drawRect(this.graphics,[10,30,84,480],false,0x000000);
 			LDisplay.drawRect(this.graphics,[100,30,800,480],false,0x000000);
+			
+			_terrainCooTitle = LGlobal.getColorText(new BitmapData(10,10,false,0x000000),"地图坐标",18);
+			_terrainCooTitle.x = 650;
+			_terrainCooTitle.y = 530;
+			this.addChild(_terrainCooTitle);
+			_terrainCoo = new LLabel();
+			_terrainCoo.x = 680;
+			_terrainCoo.y = 570;
+			this.addChild(_terrainCoo);
+			_terrainCoo.text="0,0";
 			
 			_bitSave = new LBitmap(Global.imgData[SAVE_INDEX]);
 			LFilter.setFilter(_bitSave,LFilter.GRAY);

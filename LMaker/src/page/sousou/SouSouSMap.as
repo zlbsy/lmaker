@@ -56,6 +56,8 @@ package page.sousou
 		private var _terrainAlphaNum:LLabel;
 		private var _terrainAlphaUp:LButton;
 		private var _terrainAlphaDown:LButton;
+		private var _terrainCooTitle:LSprite;
+		private var _terrainCoo:LLabel;
 		public function SouSouSMap()
 		{
 			super();
@@ -68,6 +70,17 @@ package page.sousou
 			_urlloader.addEventListener(Event.COMPLETE,loadTerrainOver);
 			_urlloader.load(new URLRequest(Global.sousouPath + "/initialization/Terrain.sgj"));
 		}
+
+		public function get terrainCoo():LLabel
+		{
+			return _terrainCoo;
+		}
+
+		public function set terrainCoo(value:LLabel):void
+		{
+			_terrainCoo = value;
+		}
+
 		private function loadTerrainOver(event:Event):void{
 			if(event != null){
 				Global.terrain = new XML(_urlloader.data);
@@ -98,8 +111,6 @@ package page.sousou
 				txt.htmlText = "<font size='15' color='"+strcolor.replace("0x","#")+"'><b>" + element.toString() + "</b></font>";
 				txt.x = int(i%cnt)*_nodeSLength+(_nodeSLength/2 - txt.width/2);
 				txt.y = int(i/cnt)*_nodeSLength + (_nodeSLength/2 - txt.height/2 );
-				//txt.coordinate = new Point((i%2)*_nodeSLength+(_nodeSLength/2 - txt.width/2),int(i/2)*_nodeSLength + (_nodeSLength/2 - txt.height/2 ));
-				//txt.xy = new LCoordinate((i%2)*_nodeSLength+(_nodeSLength/2 - txt.width/2),int(i/2)*_nodeSLength + (_nodeSLength/2 - txt.height/2 ));
 				soTerrain.addChild(txt);
 				i++;
 			}
@@ -111,13 +122,20 @@ package page.sousou
 			setTerrain(indexX,indexY);
 		}
 		private function init():void{
-			//LDisplay.drawRectGradient(this.graphics,[0,20,910,500],[0xffffff,0x8A98F4]);
 			LDisplay.drawRectGradient(this.graphics,[0,20,910,600],[0xffffff,0x8A98F4]);
-			//LDisplay.drawRect(this.graphics,[0,20,910,500],false,0x000000);
 			LDisplay.drawRect(this.graphics,[0,20,910,600],false,0x000000);
 			LDisplay.drawRect(this.graphics,[10,30,84,480],false,0x000000);
 			LDisplay.drawRect(this.graphics,[100,30,800,480],false,0x000000);
 			LDisplay.drawRect(this.graphics,[10,520,890,90],false,0x000000);
+			_terrainCooTitle = LGlobal.getColorText(new BitmapData(10,10,false,0x000000),"地图坐标",18);
+			_terrainCooTitle.x = 650;
+			_terrainCooTitle.y = 530;
+			this.addChild(_terrainCooTitle);
+			_terrainCoo = new LLabel();
+			_terrainCoo.x = 680;
+			_terrainCoo.y = 570;
+			this.addChild(_terrainCoo);
+			_terrainCoo.text="0,0";
 			
 			_terrainAlphaTitle = LGlobal.getColorText(new BitmapData(10,10,false,0x000000),"地形显示透明度",18);
 			_terrainAlphaTitle.x = 750;
