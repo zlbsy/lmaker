@@ -318,7 +318,7 @@ package page.sousou
 			if(_ctrl_type == 0){
 				bitView = bitViewATK;
 				imglist = imglistATK;
-			}else if(_ctrl_type == 0){
+			}else if(_ctrl_type == 1){
 				bitView = bitViewMOV;
 				imglist = imglistMOV;
 			}else{
