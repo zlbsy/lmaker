@@ -11,6 +11,7 @@ package
 	import flash.net.navigateToURL;
 	import flash.utils.ByteArray;
 	
+	import page.app.AppMake;
 	import page.logo.Logo;
 	import page.sousou.SouSouMake;
 	
@@ -28,6 +29,7 @@ package
 	{
 		private const URL_BLOG:String = "http://blog.csdn.com/lufy_Legend";
 		private const TITLE_LOGO:String = "LMaker游戏开发";
+		private const TITLE_APP:String = "简单应用开发";
 		private const TITLE_SOUSOU:String = "战棋游戏开发";
 		private const BAR_ABOUT:String = "<b><font color='#ffffff' size='15'><u><a href='event:" + URL_BLOG + "'>关于LMaker</a></u></font></b>";
 		private const BAR_LOGO:String = "<b><font color='#ffffff' size='15'><u><a href='event:" + URL_BLOG + "'>主菜单</a></u></font></b>";
@@ -149,6 +151,14 @@ package
 			var sousoupage:SouSouMake = new SouSouMake();
 			sousoupage.y = _title.height;
 			_backLayer.addChild(sousoupage);
+		}
+		public function showApp():void{
+			_backLayer.die();
+			setTitleName(TITLE_APP);
+			
+			var apppage:AppMake = new AppMake();
+			apppage.y = _title.height;
+			_backLayer.addChild(apppage);
 		}
 		public function setTitleName(value:String):void{
 			_titleName.removeFromParent();

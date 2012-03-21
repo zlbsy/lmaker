@@ -24,6 +24,7 @@ package
 		public static var terrainAlpha:int = 5;
 		public static var lmaker:LMaker;
 		public static var imgData:Array;
+		public static var appPath:String;
 		public static var sousouPath:String;
 		
 		public static function saveBytesData(path:String,filename:String,msg:ByteArray):void{
