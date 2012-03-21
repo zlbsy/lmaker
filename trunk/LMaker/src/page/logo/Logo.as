@@ -62,6 +62,7 @@ package page.logo
 			var btnApp:LButton = LGlobal.getModelButton(0,[0,0,220,50,BTN_APP,20]);
 			btnApp.x = btnX;
 			btnApp.y = 250;
+			btnApp.addEventListener(MouseEvent.MOUSE_UP,appClick);
 			this.addChild(btnApp);
 			
 			var btnSouSou:LButton = LGlobal.getModelButton(0,[0,0,220,50,BTN_SOUSOU,20]);
@@ -107,6 +108,9 @@ package page.logo
 			txtApp.y = (spriteMMRPG.height - txtApp.height)/2;
 			spriteMMRPG.addChild(txtApp);
 			this.addChild(spriteMMRPG);
+		}
+		private function appClick(event:MouseEvent):void{
+			Global.lmaker.showApp();
 		}
 		private function sousouClick(event:MouseEvent):void{
 			Global.lmaker.showSouSou();
