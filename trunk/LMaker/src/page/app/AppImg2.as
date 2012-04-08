@@ -279,7 +279,7 @@ package page.app
 				bytes.writeBytes(byte);
 			}
 			bytes.compress();
-			_urlloader.load(new URLRequest(Global.appPath+"/img.limg2"));
+			Global.saveBytesData(Global.appPath,"img.limg2",bytes);
 			this._btnSave.visible = false;
 		}
 	}
