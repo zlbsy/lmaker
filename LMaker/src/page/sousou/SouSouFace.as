@@ -10,16 +10,16 @@ package page.sousou
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
-	import zhanglubin.legend.components.LLabel;
-	import zhanglubin.legend.display.LBitmap;
-	import zhanglubin.legend.display.LButton;
-	import zhanglubin.legend.display.LImageLoader;
-	import zhanglubin.legend.display.LScrollbar;
-	import zhanglubin.legend.display.LSprite;
-	import zhanglubin.legend.display.LURLLoader;
-	import zhanglubin.legend.utils.LDisplay;
-	import zhanglubin.legend.utils.LFilter;
-	import zhanglubin.legend.utils.LGlobal;
+	import com.lufylegend.legend.components.LLabel;
+	import com.lufylegend.legend.display.LBitmap;
+	import com.lufylegend.legend.display.LButton;
+	import com.lufylegend.legend.display.LImageLoader;
+	import com.lufylegend.legend.display.LScrollbar;
+	import com.lufylegend.legend.display.LSprite;
+	import com.lufylegend.legend.display.LURLLoader;
+	import com.lufylegend.legend.utils.LDisplay;
+	import com.lufylegend.legend.utils.LFilter;
+	import com.lufylegend.legend.utils.LGlobal;
 
 	public class SouSouFace extends LSprite
 	{

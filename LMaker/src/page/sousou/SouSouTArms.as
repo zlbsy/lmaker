@@ -8,20 +8,20 @@ package page.sousou
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
-	import zhanglubin.legend.components.LComboBox;
-	import zhanglubin.legend.components.LLabel;
-	import zhanglubin.legend.components.LRadio;
-	import zhanglubin.legend.components.LRadioChild;
-	import zhanglubin.legend.components.LTextInput;
-	import zhanglubin.legend.display.LBitmap;
-	import zhanglubin.legend.display.LButton;
-	import zhanglubin.legend.display.LScrollbar;
-	import zhanglubin.legend.display.LSprite;
-	import zhanglubin.legend.display.LURLLoader;
-	import zhanglubin.legend.events.LEvent;
-	import zhanglubin.legend.utils.LDisplay;
-	import zhanglubin.legend.utils.LFilter;
-	import zhanglubin.legend.utils.LGlobal;
+	import com.lufylegend.legend.components.LComboBox;
+	import com.lufylegend.legend.components.LLabel;
+	import com.lufylegend.legend.components.LRadio;
+	import com.lufylegend.legend.components.LRadioChild;
+	import com.lufylegend.legend.components.LTextInput;
+	import com.lufylegend.legend.display.LBitmap;
+	import com.lufylegend.legend.display.LButton;
+	import com.lufylegend.legend.display.LScrollbar;
+	import com.lufylegend.legend.display.LSprite;
+	import com.lufylegend.legend.display.LURLLoader;
+	import com.lufylegend.legend.events.LEvent;
+	import com.lufylegend.legend.utils.LDisplay;
+	import com.lufylegend.legend.utils.LFilter;
+	import com.lufylegend.legend.utils.LGlobal;
 	
 	public class SouSouTArms extends LSprite
 	{
