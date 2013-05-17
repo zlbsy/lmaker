@@ -15,14 +15,14 @@ package
 	import page.logo.Logo;
 	import page.sousou.SouSouMake;
 	
-	import zhanglubin.legend.components.LLabel;
-	import zhanglubin.legend.display.LButton;
-	import zhanglubin.legend.display.LImageLoader;
-	import zhanglubin.legend.display.LSprite;
-	import zhanglubin.legend.display.LURLLoader;
-	import zhanglubin.legend.utils.LDisplay;
-	import zhanglubin.legend.utils.LFilter;
-	import zhanglubin.legend.utils.LGlobal;
+	import com.lufylegend.legend.components.LLabel;
+	import com.lufylegend.legend.display.LButton;
+	import com.lufylegend.legend.display.LImageLoader;
+	import com.lufylegend.legend.display.LSprite;
+	import com.lufylegend.legend.display.LURLLoader;
+	import com.lufylegend.legend.utils.LDisplay;
+	import com.lufylegend.legend.utils.LFilter;
+	import com.lufylegend.legend.utils.LGlobal;
 	
 	[SWF(width="1024",height="700",frameRate="50",backgroundcolor="0x000000")]
 	public class LMaker extends LSprite
