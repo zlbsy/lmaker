@@ -5,12 +5,12 @@ package page.sousou
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import zhanglubin.legend.components.LLabel;
-	import zhanglubin.legend.display.LBitmap;
-	import zhanglubin.legend.display.LShape;
-	import zhanglubin.legend.display.LSprite;
-	import zhanglubin.legend.utils.LDisplay;
-	import zhanglubin.legend.utils.math.LCoordinate;
+	import com.lufylegend.legend.components.LLabel;
+	import com.lufylegend.legend.display.LBitmap;
+	import com.lufylegend.legend.display.LShape;
+	import com.lufylegend.legend.display.LSprite;
+	import com.lufylegend.legend.utils.LDisplay;
+	import com.lufylegend.legend.utils.math.LCoordinate;
 	
 	public class SouSouMapS extends LSprite
 	{

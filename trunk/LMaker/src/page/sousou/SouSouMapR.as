@@ -5,10 +5,10 @@ package page.sousou
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import zhanglubin.legend.display.LBitmap;
-	import zhanglubin.legend.display.LShape;
-	import zhanglubin.legend.display.LSprite;
-	import zhanglubin.legend.utils.LDisplay;
+	import com.lufylegend.legend.display.LBitmap;
+	import com.lufylegend.legend.display.LShape;
+	import com.lufylegend.legend.display.LSprite;
+	import com.lufylegend.legend.utils.LDisplay;
 	
 	public class SouSouMapR extends LSprite
 	{
@@ -63,7 +63,7 @@ package page.sousou
 			var indexY:int = Math.floor(mouseY/_nodeLength);
 			var mx:int = mouseX - indexX*_nodeLength;
 			var my:int = mouseY - indexY*_nodeLength;
-			if((indexX + indexY) & 1 == 1){
+			if(((indexX + indexY) & 1) == 1){
 				if(mx >= my){
 					showCoo(indexX + 1,indexY);
 				}else{
@@ -84,7 +84,7 @@ package page.sousou
 			var indexY:int = Math.floor(mouseY/_nodeLength);
 			var mx:int = mouseX - indexX*_nodeLength;
 			var my:int = mouseY - indexY*_nodeLength;
-			if((indexX + indexY) & 1 == 1){
+			if(((indexX + indexY) & 1) == 1){
 				if(mx >= my){
 					drawTriangle3(indexX + 1,indexY);
 				}else{

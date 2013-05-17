@@ -4,14 +4,14 @@ package page.logo
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import zhanglubin.legend.components.LLabel;
-	import zhanglubin.legend.display.LBitmap;
-	import zhanglubin.legend.display.LButton;
-	import zhanglubin.legend.display.LImageLoader;
-	import zhanglubin.legend.display.LSprite;
-	import zhanglubin.legend.utils.LDisplay;
-	import zhanglubin.legend.utils.LFilter;
-	import zhanglubin.legend.utils.LGlobal;
+	import com.lufylegend.legend.components.LLabel;
+	import com.lufylegend.legend.display.LBitmap;
+	import com.lufylegend.legend.display.LButton;
+	import com.lufylegend.legend.display.LImageLoader;
+	import com.lufylegend.legend.display.LSprite;
+	import com.lufylegend.legend.utils.LDisplay;
+	import com.lufylegend.legend.utils.LFilter;
+	import com.lufylegend.legend.utils.LGlobal;
 
 	public class Logo extends LSprite
 	{
@@ -21,7 +21,7 @@ package page.logo
 		private const TITLE_MINI:String = "・L#游戏引擎专用开发工具\n・官方博客:http://blog.csdn.net/lufy_Legend";
 		private const BTN_APP:String = "简单应用开发";
 		private const BTN_SOUSOU:String = "战棋游戏开发";
-		private const BTN_SLG:String = "<font color='#ffffff' size='20'><b>大型SLG战略游戏开发</b></font>";
+		private const BTN_SLG:String = "<font color='#ffffff' size='20'><b>SLG战略游戏开发</b></font>";
 		private const BTN_RPG:String = "<font color='#ffffff' size='20'><b>RPG角色游戏开发</b></font>";
 		private const BTN_MMRPG:String = "<font color='#ffffff' size='20'><b>MMRPG在线游戏开发</b></font>";
 		
